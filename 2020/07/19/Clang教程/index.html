@@ -20,24 +20,39 @@
     var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="# LLVM  &#96;LLVM&#96; 是 &#96;Low Level Virtual Machine&#96; （低级虚拟机）的首字母缩写， &#96;LLVM&#96; 发展至今已不再是“低级”虚拟机了，而是一个编译器的基础设施系统框架，提供程序分析、代码优化、机器代码生成等功能。  ## LLVM 工具链  &#96;LLVM&#96; 有专门的文件格式 &#96;.ll&#96;（可读的 &#96;LLVM&#96; 字节码文件）、 &#96;.bc&#96;（可读的 &#96;LLVM&#96; 字节码">
+  <meta name="description" content="LLVMLLVM 是 Low Level Virtual Machine （低级虚拟机）的首字母缩写， LLVM 发展至今已不再是“低级”虚拟机了，而是一个编译器的基础设施系统框架，提供程序分析、代码优化、机器代码生成等功能。 LLVM 工具链LLVM 有专门的文件格式 .ll（可读的 LLVM 字节码文件）、 .bc（可读的 LLVM 字节码文件），同时LLVM 也有其他的配套工具链用于编译、优">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Clang教程">
 <meta property="og:url" content="http://yoursite.com/2020/07/19/Clang%E6%95%99%E7%A8%8B/index.html">
 <meta property="og:site_name" content="李太吉的技术博客">
-<meta property="og:description" content="# LLVM  &#96;LLVM&#96; 是 &#96;Low Level Virtual Machine&#96; （低级虚拟机）的首字母缩写， &#96;LLVM&#96; 发展至今已不再是“低级”虚拟机了，而是一个编译器的基础设施系统框架，提供程序分析、代码优化、机器代码生成等功能。  ## LLVM 工具链  &#96;LLVM&#96; 有专门的文件格式 &#96;.ll&#96;（可读的 &#96;LLVM&#96; 字节码文件）、 &#96;.bc&#96;（可读的 &#96;LLVM&#96; 字节码">
+<meta property="og:description" content="LLVMLLVM 是 Low Level Virtual Machine （低级虚拟机）的首字母缩写， LLVM 发展至今已不再是“低级”虚拟机了，而是一个编译器的基础设施系统框架，提供程序分析、代码优化、机器代码生成等功能。 LLVM 工具链LLVM 有专门的文件格式 .ll（可读的 LLVM 字节码文件）、 .bc（可读的 LLVM 字节码文件），同时LLVM 也有其他的配套工具链用于编译、优">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://yoursite.com/2020/07/19/Clang%E6%95%99%E7%A8%8B/fib.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/07/19/Clang%E6%95%99%E7%A8%8B/target.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/07/19/Clang%E6%95%99%E7%A8%8B/crosscompile.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/07/19/Clang%E6%95%99%E7%A8%8B/layout.jpg">
 <meta property="og:image" content="http://yoursite.com/2020/07/19/Clang%E6%95%99%E7%A8%8B/check.jpg">
 <meta property="og:image" content="http://yoursite.com/2020/07/19/Clang%E6%95%99%E7%A8%8B/ssa.jpg">
 <meta property="og:image" content="http://yoursite.com/2020/07/19/Clang%E6%95%99%E7%A8%8B/ssacontrol.jpg">
 <meta property="og:image" content="http://yoursite.com/2020/07/19/Clang%E6%95%99%E7%A8%8B/merge.jpg">
 <meta property="og:image" content="http://yoursite.com/2020/07/19/Clang%E6%95%99%E7%A8%8B/implement.jpg">
 <meta property="og:image" content="http://yoursite.com/2020/07/19/Clang%E6%95%99%E7%A8%8B/cfg.png">
+<meta property="og:image" content="http://yoursite.com/2020/07/19/Clang%E6%95%99%E7%A8%8B/phi.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/07/19/Clang%E6%95%99%E7%A8%8B/gep1.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/07/19/Clang%E6%95%99%E7%A8%8B/gep2.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/07/19/Clang%E6%95%99%E7%A8%8B/gep3.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/07/19/Clang%E6%95%99%E7%A8%8B/gep4.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/07/19/Clang%E6%95%99%E7%A8%8B/gep5.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/07/19/Clang%E6%95%99%E7%A8%8B/process1.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/07/19/Clang%E6%95%99%E7%A8%8B/process2.png">
+<meta property="og:image" content="http://yoursite.com/2020/07/19/Clang%E6%95%99%E7%A8%8B/compile.JPG">
+<meta property="og:image" content="http://yoursite.com/2020/07/19/Clang%E6%95%99%E7%A8%8B/link.JPG">
+<meta property="og:image" content="http://yoursite.com/2020/07/19/Clang%E6%95%99%E7%A8%8B/visualize1.png">
+<meta property="og:image" content="http://yoursite.com/2020/07/19/Clang%E6%95%99%E7%A8%8B/visualize2.png">
 <meta property="article:published_time" content="2020-07-19T09:06:35.000Z">
-<meta property="article:modified_time" content="2020-07-19T09:07:57.509Z">
+<meta property="article:modified_time" content="2020-07-19T10:58:42.580Z">
 <meta property="article:author" content="李太吉">
-<meta property="article:tag" content="C&#x2F;C++ Java Rust">
+<meta property="article:tag" content="Clang 编译器">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://yoursite.com/2020/07/19/Clang%E6%95%99%E7%A8%8B/fib.jpg">
 
@@ -184,7 +199,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-07-19 17:06:35 / 修改时间：17:07:57" itemprop="dateCreated datePublished" datetime="2020-07-19T17:06:35+08:00">2020-07-19</time>
+              <time title="创建时间：2020-07-19 17:06:35 / 修改时间：18:58:42" itemprop="dateCreated datePublished" datetime="2020-07-19T17:06:35+08:00">2020-07-19</time>
             </span>
 
           
@@ -198,632 +213,323 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
-# LLVM
-
-`LLVM` 是 `Low Level Virtual Machine` （低级虚拟机）的首字母缩写， `LLVM` 发展至今已不再是“低级”虚拟机了，而是一个编译器的基础设施系统框架，提供程序分析、代码优化、机器代码生成等功能。
-
-## LLVM 工具链
-
-`LLVM` 有专门的文件格式 `.ll`（可读的 `LLVM` 字节码文件）、 `.bc`（可读的 `LLVM` 字节码文件），同时`LLVM` 也有其他的配套工具链用于编译、优化、链接等。`.bc` 文件比 `.ll` 文件多进行了汇编阶段，因此我们可以通过反汇编 `.bc` 文件得到 `.ll` 文件。下面我们已 `main.cpp` 和 `fib.cpp` 为例介绍 `LLVM` 工具链。
-
+        <h1 id="LLVM"><a href="#LLVM" class="headerlink" title="LLVM"></a>LLVM</h1><p><code>LLVM</code> 是 <code>Low Level Virtual Machine</code> （低级虚拟机）的首字母缩写， <code>LLVM</code> 发展至今已不再是“低级”虚拟机了，而是一个编译器的基础设施系统框架，提供程序分析、代码优化、机器代码生成等功能。</p>
+<h2 id="LLVM-工具链"><a href="#LLVM-工具链" class="headerlink" title="LLVM 工具链"></a>LLVM 工具链</h2><p><code>LLVM</code> 有专门的文件格式 <code>.ll</code>（可读的 <code>LLVM</code> 字节码文件）、 <code>.bc</code>（可读的 <code>LLVM</code> 字节码文件），同时<code>LLVM</code> 也有其他的配套工具链用于编译、优化、链接等。<code>.bc</code> 文件比 <code>.ll</code> 文件多进行了汇编阶段，因此我们可以通过反汇编 <code>.bc</code> 文件得到 <code>.ll</code> 文件。下面我们已 <code>main.cpp</code> 和 <code>fib.cpp</code> 为例介绍 <code>LLVM</code> 工具链。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// fib.cpp</span></span><br><span class="line"><span class="function"><span class="keyword">long</span> <span class="keyword">long</span> <span class="title">fib</span><span class="params">(<span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (n &lt; <span class="number">2</span>)</span><br><span class="line">        <span class="keyword">return</span> n;</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> result = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> f0 = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> f1 = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        result = f0 + f1;</span><br><span class="line">        f0 = f1;</span><br><span class="line">        f1 = result;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// main.cpp</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">extern</span> <span class="keyword">long</span> <span class="keyword">long</span> <span class="title">fib</span><span class="params">(<span class="keyword">int</span> n)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"Please enter the order number: "</span>);</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;n);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"The %dth Fibonacci number: %lld\n"</span>, n, fib(n));</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-### llvm-as
-
-将 `.ll ` 文件反汇编为 `bc ` 文件：
-
+<h3 id="llvm-as"><a href="#llvm-as" class="headerlink" title="llvm-as"></a>llvm-as</h3><p>将 <code>.ll</code> 文件反汇编为 <code>bc</code> 文件：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">llvm-as main.ll -o main.bc</span><br></pre></td></tr></table></figure>
-
-
-
-### llvm-dis
-
-将 `.bc` 文件反汇编为 `.ll ` 文件：
-
+<h3 id="llvm-dis"><a href="#llvm-dis" class="headerlink" title="llvm-dis"></a>llvm-dis</h3><p>将 <code>.bc</code> 文件反汇编为 <code>.ll</code> 文件：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">llvm-dis main.bc -o main.ll</span><br></pre></td></tr></table></figure>
-
-
-
-### llvm-link
-
-传统的编译器一般是对 `obj` 文件进行链接，`LLVM` 也可以对 `.ll` 和 `.bc` 文件（以下统称 `LLVM` 字节码文件）进行链接。
-
-`llvm-link` 接受 `.ll` 和 `.bc` 文件，进行链接并可输出 `.ll` 和 `.bc` 文件：
-
+<h3 id="llvm-link"><a href="#llvm-link" class="headerlink" title="llvm-link"></a>llvm-link</h3><p>传统的编译器一般是对 <code>obj</code> 文件进行链接，<code>LLVM</code> 也可以对 <code>.ll</code> 和 <code>.bc</code> 文件（以下统称 <code>LLVM</code> 字节码文件）进行链接。</p>
+<p><code>llvm-link</code> 接受 <code>.ll</code> 和 <code>.bc</code> 文件，进行链接并可输出 <code>.ll</code> 和 <code>.bc</code> 文件：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">llvm-link main.ll fib.ll -S -o linked.ll</span><br><span class="line">llvm-link main.bc fib.bc -o linked.bc</span><br></pre></td></tr></table></figure>
-
-
-
-### lli
-
-`LLVM` 可以直接运行 `.ll` 和 `.bc` 文件。
-
-`lli` 执行 `.ll` 和 `.bc` 文件：
-
+<h3 id="lli"><a href="#lli" class="headerlink" title="lli"></a>lli</h3><p><code>LLVM</code> 可以直接运行 <code>.ll</code> 和 <code>.bc</code> 文件。</p>
+<p><code>lli</code> 执行 <code>.ll</code> 和 <code>.bc</code> 文件：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lli linked.ll</span><br><span class="line">lli linked.bc</span><br></pre></td></tr></table></figure>
-
-**注：**`lli` 工具使用 `JIT` （即时编译）作为执行 `LLVM` 字节码文件的默认方法，若你的源码中包含对库函数或其他外部函数的调用，`lli` 运行时一般会出错。因为正常编译时，链接器会处理这些调用的外部函数，而 `LLVM` 字节码文件尚未经过链接，这些外部函数在 `LLVM` 字节码文件中只是一些符号，直接通过 `lli` 运行会出现未定义错误。
-
-
-
-### llc
-
-`LLVM` 可以将 `.ll` 和 `.bc` 文件编译为通用汇编语言。
-
-`llc` 编译 `LLVM` 源文件到用于指定的体系结构的汇编语言：
-
+<p><strong>注：</strong><code>lli</code> 工具使用 <code>JIT</code> （即时编译）作为执行 <code>LLVM</code> 字节码文件的默认方法，若你的源码中包含对库函数或其他外部函数的调用，<code>lli</code> 运行时一般会出错。因为正常编译时，链接器会处理这些调用的外部函数，而 <code>LLVM</code> 字节码文件尚未经过链接，这些外部函数在 <code>LLVM</code> 字节码文件中只是一些符号，直接通过 <code>lli</code> 运行会出现未定义错误。</p>
+<h3 id="llc"><a href="#llc" class="headerlink" title="llc"></a>llc</h3><p><code>LLVM</code> 可以将 <code>.ll</code> 和 <code>.bc</code> 文件编译为通用汇编语言。</p>
+<p><code>llc</code> 编译 <code>LLVM</code> 源文件到用于指定的体系结构的汇编语言：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">llc main.ll -o main.s</span><br></pre></td></tr></table></figure>
-
-
-
-### opt
-
-`LLVM` 还可以对 `.ll` 和 `.bc` 进行优化，`LLVM` 的优化能力也是`LLVM` 的一项突出能力。
-
-**注：**
-
-1. 当使用 `-O0` 编译（默认即是 `-O0` ）时，`Clang` 向每个函数添加 `optnone` 属性，这阻止了以后的进一步优化，为了防止这种情况，可以添加 `-Xclang -disable-O0-optnone` 选项。
-
-    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clang++ fib.cpp -Xclang -disable-O0-optnone -emit-llvm -S -o fib.ll</span><br></pre></td></tr></table></figure>
-
-2. 当希望进行调试时，最好使用 `-O0` 或 `-O1` 编译，因为优化可能会改变控制流，导致指令执行顺序发生变化；还可能直接将一些潜在的 `bug` 优化掉（尽管 `bug` 没有了，但这是编译器优化解决的，不代表代码正确，你甚至不知道 `bug` 的存在，当你更换编译选项或者编译器时，`bug` 就又出现了）。
-
-3. 越高的优化级别生成的代码一般执行速度更快，但代码大小也普遍更大。
-
-4. `clang` 是一个驱动程序，给 `clang` 传入优化选项实质是传给了 `opt` 。
-
-`opt` 可以对 `.ll` 和 `.bc` 文件进行优化，`opt` 可以接受的优化选项很多，这里不再赘述。`opt` 还可以生成控制流图（`Control Flow Graphic` ）：
-
+<h3 id="opt"><a href="#opt" class="headerlink" title="opt"></a>opt</h3><p><code>LLVM</code> 还可以对 <code>.ll</code> 和 <code>.bc</code> 进行优化，<code>LLVM</code> 的优化能力也是<code>LLVM</code> 的一项突出能力。</p>
+<p><strong>注：</strong></p>
+<ol>
+<li><p>当使用 <code>-O0</code> 编译（默认即是 <code>-O0</code> ）时，<code>Clang</code> 向每个函数添加 <code>optnone</code> 属性，这阻止了以后的进一步优化，为了防止这种情况，可以添加 <code>-Xclang -disable-O0-optnone</code> 选项。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clang++ fib.cpp -Xclang -disable-O0-optnone -emit-llvm -S -o fib.ll</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>当希望进行调试时，最好使用 <code>-O0</code> 或 <code>-O1</code> 编译，因为优化可能会改变控制流，导致指令执行顺序发生变化；还可能直接将一些潜在的 <code>bug</code> 优化掉（尽管 <code>bug</code> 没有了，但这是编译器优化解决的，不代表代码正确，你甚至不知道 <code>bug</code> 的存在，当你更换编译选项或者编译器时，<code>bug</code> 就又出现了）。</p>
+</li>
+<li><p>越高的优化级别生成的代码一般执行速度更快，但代码大小也普遍更大。</p>
+</li>
+<li><p><code>clang</code> 是一个驱动程序，给 <code>clang</code> 传入优化选项实质是传给了 <code>opt</code> 。</p>
+</li>
+</ol>
+<p><code>opt</code> 可以对 <code>.ll</code> 和 <code>.bc</code> 文件进行优化，<code>opt</code> 可以接受的优化选项很多，这里不再赘述。<code>opt</code> 还可以生成控制流图（<code>Control Flow Graphic</code> ）：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; clang++ fib.cpp -emit-llvm -fno-discard-value-names -S -o fib.ll</span><br><span class="line">&gt; opt -analyze -dot-cfg-only fib.ll</span><br><span class="line">Writing &#39;._Z3fibi.dot&#39;...</span><br><span class="line">Printing analysis &#39;Print CFG of function to &#39;dot&#39; file (with no function bodies)&#39; for function &#39;_Z3fibi&#39;:</span><br></pre></td></tr></table></figure>
-
-你会得到一些 `.dot` 文件，你需要配置 `Graphviz` ，执行 `dot  ._Z3fibi.dot -Tpng -o fib.png` 。
-
-<img src="/2020/07/19/Clang%E6%95%99%E7%A8%8B/fib.jpg" alt="cfg" style="zoom: 80%;">
-
-`opt` 还支持以下的可视化图形帮助理解分析逻辑：
-
+<p>你会得到一些 <code>.dot</code> 文件，你需要配置 <code>Graphviz</code> ，执行 <code>dot  ._Z3fibi.dot -Tpng -o fib.png</code> 。</p>
+<p><img src="/2020/07/19/Clang%E6%95%99%E7%A8%8B/fib.jpg" alt="cfg" style="zoom: 80%;"></p>
+<p><code>opt</code> 还支持以下的可视化图形帮助理解分析逻辑：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">--view-callgraph                                  - View call graph</span><br><span class="line">--view-cfg                                        - View CFG of function</span><br><span class="line">--view-cfg-only                                   - View CFG of function (with no function bodies)</span><br><span class="line">--view-dom                                        - View dominance tree of function</span><br><span class="line">--view-dom-only                                   - View dominance tree of function (with no function bodies)</span><br><span class="line">--view-postdom                                    - View postdominance tree of function</span><br><span class="line">--view-postdom-only                               - View postdominance tree of function (with no function bodies)</span><br><span class="line">--view-regions                                    - View regions of function</span><br><span class="line">--view-regions-only                               - View regions of function (with no function bodies)</span><br></pre></td></tr></table></figure>
-
-`opt` 可以根据硬件平台的不同执行不同的优化，可以参看[编译器优化做指令调度时是怎么考虑不同的微架构下对同一个指令的执行周期数是不同的？ - RednaxelaFX的回答 - 知乎]( https://www.zhihu.com/question/31379945/answer/51755394)以及使用[clang: how to list supported target architectures?](https://stackoverflow.com/questions/15036909/clang-how-to-list-supported-target-architectures)查看 `LLVM` 支持的平台和 `CPU` 。
-
-
-
-### lld
-
-`LLVM` 拥有配套的链接器 `LLD`，可以进行链接时优化（`Link Time Optimization` ），而且相对于 `GNU ld` ，链接速度更快，编译输出更小，具体请查看[ `LLD` 官网](http://lld.llvm.org/)。
-
-可以在编译时添加 `-fuse-ld=lld` 选项来指定  `LLD` 链接器：
-
+<p><code>opt</code> 可以根据硬件平台的不同执行不同的优化，可以参看<a href="https://www.zhihu.com/question/31379945/answer/51755394" target="_blank" rel="noopener">编译器优化做指令调度时是怎么考虑不同的微架构下对同一个指令的执行周期数是不同的？ - RednaxelaFX的回答 - 知乎</a>以及使用<a href="https://stackoverflow.com/questions/15036909/clang-how-to-list-supported-target-architectures" target="_blank" rel="noopener">clang: how to list supported target architectures?</a>查看 <code>LLVM</code> 支持的平台和 <code>CPU</code> 。</p>
+<h3 id="lld"><a href="#lld" class="headerlink" title="lld"></a>lld</h3><p><code>LLVM</code> 拥有配套的链接器 <code>LLD</code>，可以进行链接时优化（<code>Link Time Optimization</code> ），而且相对于 <code>GNU ld</code> ，链接速度更快，编译输出更小，具体请查看<a href="http://lld.llvm.org/" target="_blank" rel="noopener"> <code>LLD</code> 官网</a>。</p>
+<p>可以在编译时添加 <code>-fuse-ld=lld</code> 选项来指定  <code>LLD</code> 链接器：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clang++ main.cpp -fuse-ld&#x3D;lld -o main.exe</span><br></pre></td></tr></table></figure>
-
-`LLVM` 通过 `LLVM IR` 来实现 `LTO`，如果想使用 `LTO` ，需要在编译每个待链接的文件以及链接这些文件时都添加 `-flto` 选项：
-
+<p><code>LLVM</code> 通过 <code>LLVM IR</code> 来实现 <code>LTO</code>，如果想使用 <code>LTO</code> ，需要在编译每个待链接的文件以及链接这些文件时都添加 <code>-flto</code> 选项：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">clang++ main.cpp -flto -O1 -c -o main.o</span><br><span class="line">clang++ factorial.bc -flto -O1 -c -o factorial.o</span><br><span class="line">clang++ mian.o factorial.o -flto -fuse-ld&#x3D;lld -o main.exe</span><br></pre></td></tr></table></figure>
-
-关于 `LTO` ，可以查看官网上 [`LLVM LTO` ](https://llvm.org/docs/LinkTimeOptimization.html) 的介绍，以及 `GCC `[ `LTO `](https://stackoverflow.com/questions/48030706/can-lto-for-gcc-or-clang-optimize-across-c-and-c-methods)的介绍。
-
-**注意：**
-
-1.  `Clang` 和 `GCC` 都支持 `LTO`，但由于 `LTO` 是通过中间表示（`GCC` 上为 `GIMPLE` ，`Clang`上为 `LLVM IR` ）实现的，所以不能 `Clang` 和 `GCC` 的 `LTO` 不通用。
-2. 若要使用 `LTO` ，建议使用相同的选项编译参与链接的所有文件，且必须在编译和链接时添加选项 `-flto` 。但优化标志 `-Og` 、`-O2` 和 `-Os ` 可以作为优化属性传递，而不会受限于编译时和链接时间标志应该相同的情况。
-3. 在链接时传递的优化和目标选项将被忽略。
-4.  有时需要在编译 `.obj` 文件时添加 `-O1` 等优化选项，才会启用 `LTO` 。
-
-
-
-### lldb
-
-`LLVM` 也有对应的调试器 `LLDB`，`LLDB` 与 `GDB` 功能类似，但命令更加友好，而且`LLDB` 具有与 `Clang` 相同的有点，也就是它可以高亮显示调试和错误信息。可以登录[ `LLDB` 官网](https://lldb.llvm.org)，学习`LLDB`  的[教程](https://lldb.llvm.org/use/tutorial.html)，以及查看 `LLDB` 与 `GDB` 命令的[对照](https://lldb.llvm.org/use/map.html)，你也可以首先学习 `GDB` 的教程 [RMS's gdb Debugger Tutorial](http://www.unknownroad.com/rtfm/gdbtut/)。
-
-
-
-## LLVM IR 文件的布局
-
-
-
-### Target Information
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">; ModuleID &#x3D; &#39;main.cpp&#39;</span><br><span class="line">source_filename &#x3D; &quot;main.cpp&quot;</span><br><span class="line">target datalayout &#x3D; &quot;e-m:w-i64:64-f80:128-n8:16:32:64-S128&quot;</span><br><span class="line">target triple &#x3D; &quot;x86_64-w64-windows-gnu&quot;</span><br></pre></td></tr></table></figure>
-
-`target datalayout` 为 `target` 的数据布局，`target triple` 为 `target` 的平台信息。
-
-![target](target.jpg)
-
+<p>关于 <code>LTO</code> ，可以查看官网上 <a href="https://llvm.org/docs/LinkTimeOptimization.html" target="_blank" rel="noopener"><code>LLVM LTO</code> </a> 的介绍，以及 <code>GCC</code><a href="https://stackoverflow.com/questions/48030706/can-lto-for-gcc-or-clang-optimize-across-c-and-c-methods" target="_blank" rel="noopener"> <code>LTO</code></a>的介绍。</p>
+<p><strong>注意：</strong></p>
+<ol>
+<li><code>Clang</code> 和 <code>GCC</code> 都支持 <code>LTO</code>，但由于 <code>LTO</code> 是通过中间表示（<code>GCC</code> 上为 <code>GIMPLE</code> ，<code>Clang</code>上为 <code>LLVM IR</code> ）实现的，所以不能 <code>Clang</code> 和 <code>GCC</code> 的 <code>LTO</code> 不通用。</li>
+<li>若要使用 <code>LTO</code> ，建议使用相同的选项编译参与链接的所有文件，且必须在编译和链接时添加选项 <code>-flto</code> 。但优化标志 <code>-Og</code> 、<code>-O2</code> 和 <code>-Os</code> 可以作为优化属性传递，而不会受限于编译时和链接时间标志应该相同的情况。</li>
+<li>在链接时传递的优化和目标选项将被忽略。</li>
+<li>有时需要在编译 <code>.obj</code> 文件时添加 <code>-O1</code> 等优化选项，才会启用 <code>LTO</code> 。</li>
+</ol>
+<h3 id="lldb"><a href="#lldb" class="headerlink" title="lldb"></a>lldb</h3><p><code>LLVM</code> 也有对应的调试器 <code>LLDB</code>，<code>LLDB</code> 与 <code>GDB</code> 功能类似，但命令更加友好，而且<code>LLDB</code> 具有与 <code>Clang</code> 相同的有点，也就是它可以高亮显示调试和错误信息。可以登录<a href="https://lldb.llvm.org" target="_blank" rel="noopener"> <code>LLDB</code> 官网</a>，学习<code>LLDB</code>  的<a href="https://lldb.llvm.org/use/tutorial.html" target="_blank" rel="noopener">教程</a>，以及查看 <code>LLDB</code> 与 <code>GDB</code> 命令的<a href="https://lldb.llvm.org/use/map.html" target="_blank" rel="noopener">对照</a>，你也可以首先学习 <code>GDB</code> 的教程 <a href="http://www.unknownroad.com/rtfm/gdbtut/" target="_blank" rel="noopener">RMS’s gdb Debugger Tutorial</a>。</p>
+<h2 id="LLVM-IR-文件的布局"><a href="#LLVM-IR-文件的布局" class="headerlink" title="LLVM IR 文件的布局"></a>LLVM IR 文件的布局</h2><h3 id="Target-Information"><a href="#Target-Information" class="headerlink" title="Target Information"></a>Target Information</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">; ModuleID &#x3D; &#39;main.cpp&#39;</span><br><span class="line">source_filename &#x3D; &quot;main.cpp&quot;</span><br><span class="line">target datalayout &#x3D; &quot;e-m:w-i64:64-f80:128-n8:16:32:64-S128&quot;</span><br><span class="line">target triple &#x3D; &quot;x86_64-w64-windows-gnu&quot;</span><br></pre></td></tr></table></figure>
+<p><code>target datalayout</code> 为 <code>target</code> 的数据布局，<code>target triple</code> 为 <code>target</code> 的平台信息。</p>
+<p><img src="/2020/07/19/Clang%E6%95%99%E7%A8%8B/target.jpg" alt="target"></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">i64:64 &#x2F;&#x2F; 指定支持的整型的对齐单位，这里即是指支持64bit的整型，且以64bit对齐（存储整型的起始地址必须是128的倍数）</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">f80:128 &#x2F;&#x2F; 指定支持的浮点类型的对齐单位，这里即是指支持80bit的浮点类型，但是以128bit对齐（存储浮点数的起始地址必须是128的倍数）</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">n8:16:32:64 &#x2F;&#x2F; 指定一组支持的以位为单位的整数类型</span><br></pre></td></tr></table></figure>
-
-其他具体信息，参看[datalayout](https://llvm.org/docs/LangRef.html#data-layout)。
-
-
-
-我的`target triple` 为 `"x86_64-w64-windows-gnu"`，即 `Windows` `x64` 操作系统上以 `MinGW` 为运行时环境（一般 `Windows` 系统上以 `MSVC` 为运行时环境， `Windows` 系统和 `GCC` 搭配来使用 `LLVM` 较为麻烦，但我觉得 `MSVC` 实在是太臃肿了。不过电脑配置如果满足要求，还是建议在 `Windows` 系统上使用 `MSVC`，因为许多软件在 `Windows` 系统上支持甚至唯一支持 `MSVC` 。使用 `MSVC`不仅省去了不少麻烦，而且 `Windows` 开发人员早晚跳不过 `Visual Studio` 。）。
-
-可以通过 `clang -v` 查看 `Clang` 的版本和 `target` 信息，例如我的`Clang`具体信息为
-
+<p>其他具体信息，参看<a href="https://llvm.org/docs/LangRef.html#data-layout" target="_blank" rel="noopener">datalayout</a>。</p>
+<p>我的<code>target triple</code> 为 <code>&quot;x86_64-w64-windows-gnu&quot;</code>，即 <code>Windows</code> <code>x64</code> 操作系统上以 <code>MinGW</code> 为运行时环境（一般 <code>Windows</code> 系统上以 <code>MSVC</code> 为运行时环境， <code>Windows</code> 系统和 <code>GCC</code> 搭配来使用 <code>LLVM</code> 较为麻烦，但我觉得 <code>MSVC</code> 实在是太臃肿了。不过电脑配置如果满足要求，还是建议在 <code>Windows</code> 系统上使用 <code>MSVC</code>，因为许多软件在 <code>Windows</code> 系统上支持甚至唯一支持 <code>MSVC</code> 。使用 <code>MSVC</code>不仅省去了不少麻烦，而且 <code>Windows</code> 开发人员早晚跳不过 <code>Visual Studio</code> 。）。</p>
+<p>可以通过 <code>clang -v</code> 查看 <code>Clang</code> 的版本和 <code>target</code> 信息，例如我的<code>Clang</code>具体信息为</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">clang version 9.0.0 (tags&#x2F;RELEASE_900&#x2F;final)</span><br><span class="line">Target: x86_64-w64-windows-gnu</span><br><span class="line">Thread model: posix</span><br><span class="line">InstalledDir: D:\LLVM\bin</span><br></pre></td></tr></table></figure>
-
-`Clang` 编译时可以通过`--target` 选项指定编译的目标平台，从而实现交叉编译，当然你需要有对应的运行时库（也就是说，假如你在 `Linux` 平台上下载了 `MSVC` 的运行时库，你就可以在  `Linux` 平台上编译 `MSVC` 支持的程序）。还可以将不同语言编译到 `LLVM IR` 层面进行链接，实现多语言的相互调用。这是 `LLVM` 非常大的一个优势，借助于 `LLVM IR`，`LLVM` 实现了平台独立性和灵活性。
-
-![crosscompile](crosscompile.jpg)
-
-`Clang` 支持下列 `target triple `的组合，具体可以查看`Clang` 的[文档](http://clang.llvm.org/docs/CrossCompilation.html)：
-
+<p><code>Clang</code> 编译时可以通过<code>--target</code> 选项指定编译的目标平台，从而实现交叉编译，当然你需要有对应的运行时库（也就是说，假如你在 <code>Linux</code> 平台上下载了 <code>MSVC</code> 的运行时库，你就可以在  <code>Linux</code> 平台上编译 <code>MSVC</code> 支持的程序）。还可以将不同语言编译到 <code>LLVM IR</code> 层面进行链接，实现多语言的相互调用。这是 <code>LLVM</code> 非常大的一个优势，借助于 <code>LLVM IR</code>，<code>LLVM</code> 实现了平台独立性和灵活性。</p>
+<p><img src="/2020/07/19/Clang%E6%95%99%E7%A8%8B/crosscompile.jpg" alt="crosscompile"></p>
+<p><code>Clang</code> 支持下列 <code>target triple</code>的组合，具体可以查看<code>Clang</code> 的<a href="http://clang.llvm.org/docs/CrossCompilation.html" target="_blank" rel="noopener">文档</a>：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">The triple has the general format &lt;arch&gt;&lt;sub&gt;-&lt;vendor&gt;-&lt;sys&gt;-&lt;abi&gt;, where:</span><br><span class="line">arch &#x3D; x86, arm, thumb, mips, etc.</span><br><span class="line">sub &#x3D; for ex. on ARM: v5, v6m, v7a, v7m, etc.</span><br><span class="line">vendor &#x3D; pc, apple, nvidia, ibm, etc.</span><br><span class="line">sys &#x3D; none, linux, win32, darwin, cuda, etc.</span><br><span class="line">abi &#x3D; eabi, gnu, android, macho, elf, etc.</span><br></pre></td></tr></table></figure>
-
-常用的 `target triple ` 有：
-
+<p>常用的 <code>target triple</code> 有：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">arm-none-eabi</span><br><span class="line">armv7a-none-eabi</span><br><span class="line">arm-linux-gnueabihf </span><br><span class="line">arm-none-linux-gnueabi</span><br><span class="line">i386-pc-linux-gnu </span><br><span class="line">x86_64-apple-darwin10</span><br><span class="line">i686-w64-windows-gnu # same as i686-w64-mingw32</span><br><span class="line">x86_64-pc-linux-gnu # from ubuntu 64 bit</span><br><span class="line">x86_64-unknown-windows-cygnus # cygwin 64-bit</span><br><span class="line">x86_64-w64-windows-gnu # same as x86_64-w64-mingw32</span><br><span class="line">i686-pc-windows-gnu # MSVC</span><br><span class="line">x86_64-pc-windows-gnu # MSVC 64-BIT</span><br></pre></td></tr></table></figure>
-
-
-
-### LLVM IR 文件的架构
-
-![layout](layout.jpg)
-
-`LLVM IR` 文件从高到低由 `Moudle` 、`Function` 、 `Basic Block` 和 `Instruction`四个层次组成。
-
-
-
-## SSA （静态单分配）
-
-### 定义
-
-> `SSA` 形式是指程序中的每个变量必须且只能在定义时初始化。
-
+<h3 id="LLVM-IR-文件的架构"><a href="#LLVM-IR-文件的架构" class="headerlink" title="LLVM IR 文件的架构"></a>LLVM IR 文件的架构</h3><p><img src="/2020/07/19/Clang%E6%95%99%E7%A8%8B/layout.jpg" alt="layout"></p>
+<p><code>LLVM IR</code> 文件从高到低由 <code>Moudle</code> 、<code>Function</code> 、 <code>Basic Block</code> 和 <code>Instruction</code>四个层次组成。</p>
+<h2 id="SSA-（静态单分配）"><a href="#SSA-（静态单分配）" class="headerlink" title="SSA （静态单分配）"></a>SSA （静态单分配）</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><blockquote>
+<p><code>SSA</code> 形式是指程序中的每个变量必须且只能在定义时初始化。</p>
+</blockquote>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">int x &#x3D; 10;</span><br><span class="line">int y &#x3D; 20; &#x2F;&#x2F; SSA</span><br><span class="line"></span><br><span class="line">int x;</span><br><span class="line">x &#x3D; 10; &#x2F;&#x2F; Not SSA</span><br></pre></td></tr></table></figure>
-
-编译器为了进行代码优化，会对变量的定义和使用进行分析，主要有两种：
-
-- 使用-定义链（ `Use-­Definition (UD) Chains` )：
-
-    > 对于给定的变量 `x` 的定义，它的所有使用是什么？
-
-- 定义-使用链（ `­Definition-Use (UD) Chains` )：
-
-    > 对于给定的变量 `x` 的使用，它的所有可达性定义是什么？
-
-不幸的是，`UD` 和 `DU` 检查的花费可能会非常昂贵。
-
-<img src="/2020/07/19/Clang%E6%95%99%E7%A8%8B/check.jpg" alt="check" style="zoom: 80%;">
-
-这是由于 `x` 可以重复赋值（也即重定义）导致的，自然地，我们可以想到让每个变量只能定义一次（可以类比 `Java` 中的 `static final` 常量，但略有不同，`Java` 中的 `static final` 常量可以延迟赋值，把赋值语句放在 `static` 块中）。
-
-<img src="/2020/07/19/Clang%E6%95%99%E7%A8%8B/ssa.jpg" alt="ssa" style="zoom:50%;">
-
-但 `SSA` 在处理控制流分支时存在一个问题：
-
-<img src="/2020/07/19/Clang%E6%95%99%E7%A8%8B/ssacontrol.jpg" alt="ssacontrol" style="zoom: 67%;">
-
-变量每次赋值在 `SSA` 中都成为了一个新的变量，在线性运行时没有问题，但在遇到分支时就无法判断要使用那个新变量了。我们需要$\Phi$ 节点来实现控制流。
-
-#### $\Phi$ 函数
-
-> $\Phi$ 函数将各个控制流分支路径上的定义合并为一个单一的定义
-
-<img src="/2020/07/19/Clang%E6%95%99%E7%A8%8B/merge.jpg" alt="merge" style="zoom: 67%;">
-
-传统指令集并不支持 $\Phi$ 函数（即 `LLVM IR` 中的 `phi` 指令）的概念，`LLVM` 会对 `phi` 指令进行 `Phi destruction` ，将 `phi` 指令变为底层支持的汇编命令，例如我们可以通过在各个控制流分支路径上插入语句定义一个共享变量来实现 $\Phi$ 节点，也可以将因赋值而新定义的变量分配到同一个寄存器，从而实现在 `LLVM IR` 层次上保持 `SSA` 形式，而在寄存器层次上实质为同一变量。可以阅读[llvm的reg2mem pass做了哪些事情？ - 蓝色的回答 - 知乎](https://www.zhihu.com/question/49642237/answer/117428698)。
-
-
-
-<img src="/2020/07/19/Clang%E6%95%99%E7%A8%8B/implement.jpg" alt="implement" style="zoom: 67%;">
-
-**初级 SSA**
-
-- 每个赋值都会生成一个新的变量。
-
-- 在每个插入点为所有分支中的新变量插入 $\Phi$ 节点。
-
-**最小化 SSA**
-
-- 每个赋值都会生成一个新的变量。
-
-- 在每个插入点为处于活跃期的分支中的新变量插入 $\Phi$ 节点。活跃期定义是从变量第一次被定义（赋值）开始，到它下一次被赋值前的最后一次被使用为止。
-
-##### 什么时候插入 $\Phi$ 函数
-
-对于变量 `x` ，我们当且仅当以下情况时在 `Z` 中插入 $\Phi$ 函数：
-
-<img src="/2020/07/19/Clang%E6%95%99%E7%A8%8B/cfg.png" alt="cfg" style="zoom: 67%;">
-
-- 变量 `x` 在各个分支（ `if.then`、 `if.else`）总共定义了多于一次。
-
-- 变量 `x` 新定义所在的块都可以到达块 `Z` ，且块 `Z` 是变量 `x` 新定义所在块的最先公共后继。
-
-可以应用 [ `Lengauer-Tarjan` ](http://www.cs.cmu.edu/afs/cs.cmu.edu/academic/class/15745-s14/public/lectures/L13-SSA-Concepts-1up.pdf)算法计算支配树和支配边界判断插入 $\Phi$ 函数的块，关于支配树和支配边界还可以阅读[构造Dominator Tree以及Dominator Frontier](https://blog.csdn.net/dashuniuniu/article/details/52224882)。
-
-
-### SSA 在编译优化中的作用
-
-- 常量传播（ `constant propagation` ）
-
-    > 当 v $\leftarrow$ c 或 v $\leftarrow$ $\Phi$ (c, c, c) 时将  `v` 替换为 `c` ，并将 v $\leftarrow$  c 和 v $\leftarrow$ $\Phi$ (c, c, c) 语句删除。
-
-- 复写传播（ `copy propagation` ）
-
-    > 当 x $\leftarrow$ y 或 x $\leftarrow$ $\Phi$ (y, y, y) 时将  `x` 替换为 `y` ，并将 x $\leftarrow$ y 和 x $\leftarrow$ $\Phi$ (y, y, y) 语句删除。
-
-- 常量折叠（ `constant folding` ）
-
-    > 当 v $\leftarrow$ expression(c1, c2, ...) 时可以将右值表达式计算出结果以替换右值表达式。
-
-- 无用代码消除（ `dead code elimination` ）
-
-    > - 假设所有变量都是常量，直到该变量值改变。
-    >
-    > - 假设所有基本块都无法执行，直到该块被执行。
-    >
-    > 通过可达性分析，将常量进行折叠，并消除无用代码。
-
-### SSA 参看书目
-
-- [15-745 Optimizing Compilers for Modern Architectures, Spring 2016](http://link.zhihu.com/?target=http%3A//www.cs.cmu.edu/afs/cs.cmu.edu/academic/class/15745-s16/www/)
-- [Static Single Assignment Book](http://ssabook.gforge.inria.fr/latest/book.pdf)
-
-## LLVM IR 基本语法
-
-简要介绍 `LLVM IR` 的基本语法常用的指令，详细文档请参看[LLVM Language Reference Manual](https://llvm.org/docs/LangRef.html)。
-
-### 基本语法
-
-<figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">; Function Attrs: noinline nounwind optnone uwtable</span></span><br><span class="line"><span class="comment">define dso_local i64 @_Z3fibi(i32 %n) #0 &#123;</span></span><br><span class="line"><span class="comment">entry:</span></span><br><span class="line"><span class="comment">  %retval = alloca i64, align 8</span></span><br><span class="line"><span class="comment">  %n.addr = alloca i32, align 4</span></span><br><span class="line"><span class="comment">  %result = alloca i64, align 8</span></span><br><span class="line"><span class="comment">  %f0 = alloca i64, align 8</span></span><br><span class="line"><span class="comment">  %f1 = alloca i64, align 8</span></span><br><span class="line"><span class="comment">  %i = alloca i32, align 4</span></span><br><span class="line"><span class="comment">  store i32 %n, i32* %n.addr, align 4</span></span><br><span class="line"><span class="comment">  %0 = load i32, i32* %n.addr, align 4</span></span><br><span class="line"><span class="comment">  %cmp = icmp slt i32 %0, 2</span></span><br><span class="line"><span class="comment">  br i1 %cmp, label %if.then, label %if.end</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">if.then:                                          ; preds = %entry</span></span><br><span class="line"><span class="comment">  %1 = load i32, i32* %n.addr, align 4</span></span><br><span class="line"><span class="comment">  %conv = sext i32 %1 to i64</span></span><br><span class="line"><span class="comment">  store i64 %conv, i64* %retval, align 8</span></span><br><span class="line"><span class="comment">  br label %return</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">if.end:                                           ; preds = %entry</span></span><br><span class="line"><span class="comment">  store i64 0, i64* %result, align 8</span></span><br><span class="line"><span class="comment">  store i64 0, i64* %f0, align 8</span></span><br><span class="line"><span class="comment">  store i64 1, i64* %f1, align 8</span></span><br><span class="line"><span class="comment">  store i32 1, i32* %i, align 4</span></span><br><span class="line"><span class="comment">  br label %for.cond</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">for.cond:                                         ; preds = %for.inc, %if.end</span></span><br><span class="line"><span class="comment">  %2 = load i32, i32* %i, align 4</span></span><br><span class="line"><span class="comment">  %3 = load i32, i32* %n.addr, align 4</span></span><br><span class="line"><span class="comment">  %cmp1 = icmp slt i32 %2, %3</span></span><br><span class="line"><span class="comment">  br i1 %cmp1, label %for.body, label %for.end</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">for.body:                                         ; preds = %for.cond</span></span><br><span class="line"><span class="comment">  %4 = load i64, i64* %f0, align 8</span></span><br><span class="line"><span class="comment">  %5 = load i64, i64* %f1, align 8</span></span><br><span class="line"><span class="comment">  %add = add nsw i64 %4, %5</span></span><br><span class="line"><span class="comment">  store i64 %add, i64* %result, align 8</span></span><br><span class="line"><span class="comment">  %6 = load i64, i64* %f1, align 8</span></span><br><span class="line"><span class="comment">  store i64 %6, i64* %f0, align 8</span></span><br><span class="line"><span class="comment">  %7 = load i64, i64* %result, align 8</span></span><br><span class="line"><span class="comment">  store i64 %7, i64* %f1, align 8</span></span><br><span class="line"><span class="comment">  br label %for.inc</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">for.inc:                                          ; preds = %for.body</span></span><br><span class="line"><span class="comment">  %8 = load i32, i32* %i, align 4</span></span><br><span class="line"><span class="comment">  %inc = add nsw i32 %8, 1</span></span><br><span class="line"><span class="comment">  store i32 %inc, i32* %i, align 4</span></span><br><span class="line"><span class="comment">  br label %for.cond</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">for.end:                                          ; preds = %for.cond</span></span><br><span class="line"><span class="comment">  %9 = load i64, i64* %result, align 8</span></span><br><span class="line"><span class="comment">  store i64 %9, i64* %retval, align 8</span></span><br><span class="line"><span class="comment">  br label %return</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">return:                                           ; preds = %for.end, %if.then</span></span><br><span class="line"><span class="comment">  %10 = load i64, i64* %retval, align 8</span></span><br><span class="line"><span class="comment">  ret i64 %10</span></span><br><span class="line"><span class="comment">&#125;</span></span><br></pre></td></tr></table></figure>
-
-#### 注释
-
-`;` 表示单行注释的开始。
-
-#### 标识符
-
-`LLVM IR` 中的标识符分为两种类型：全局的和局部的。全局的标识符包括函数名和全局变量，会加一个 `@` 前缀，局部的标识符会加一个 `%` 前缀。一般地，可用标识符对应的正则表达式为：
-
+<p>编译器为了进行代码优化，会对变量的定义和使用进行分析，主要有两种：</p>
+<ul>
+<li><p>使用-定义链（ <code>Use-­Definition (UD) Chains</code> )：</p>
+<blockquote>
+<p>对于给定的变量 <code>x</code> 的定义，它的所有使用是什么？</p>
+</blockquote>
+</li>
+<li><p>定义-使用链（ <code>­Definition-Use (UD) Chains</code> )：</p>
+<blockquote>
+<p>对于给定的变量 <code>x</code> 的使用，它的所有可达性定义是什么？</p>
+</blockquote>
+</li>
+</ul>
+<p>不幸的是，<code>UD</code> 和 <code>DU</code> 检查的花费可能会非常昂贵。</p>
+<p><img src="/2020/07/19/Clang%E6%95%99%E7%A8%8B/check.jpg" alt="check" style="zoom: 80%;"></p>
+<p>这是由于 <code>x</code> 可以重复赋值（也即重定义）导致的，自然地，我们可以想到让每个变量只能定义一次（可以类比 <code>Java</code> 中的 <code>static final</code> 常量，但略有不同，<code>Java</code> 中的 <code>static final</code> 常量可以延迟赋值，把赋值语句放在 <code>static</code> 块中）。</p>
+<p><img src="/2020/07/19/Clang%E6%95%99%E7%A8%8B/ssa.jpg" alt="ssa" style="zoom:50%;"></p>
+<p>但 <code>SSA</code> 在处理控制流分支时存在一个问题：</p>
+<p><img src="/2020/07/19/Clang%E6%95%99%E7%A8%8B/ssacontrol.jpg" alt="ssacontrol" style="zoom: 67%;"></p>
+<p>变量每次赋值在 <code>SSA</code> 中都成为了一个新的变量，在线性运行时没有问题，但在遇到分支时就无法判断要使用那个新变量了。我们需要$\Phi$ 节点来实现控制流。</p>
+<h4 id="Phi-函数"><a href="#Phi-函数" class="headerlink" title="$\Phi$ 函数"></a>$\Phi$ 函数</h4><blockquote>
+<p>$\Phi$ 函数将各个控制流分支路径上的定义合并为一个单一的定义</p>
+</blockquote>
+<p><img src="/2020/07/19/Clang%E6%95%99%E7%A8%8B/merge.jpg" alt="merge" style="zoom: 67%;"></p>
+<p>传统指令集并不支持 $\Phi$ 函数（即 <code>LLVM IR</code> 中的 <code>phi</code> 指令）的概念，<code>LLVM</code> 会对 <code>phi</code> 指令进行 <code>Phi destruction</code> ，将 <code>phi</code> 指令变为底层支持的汇编命令，例如我们可以通过在各个控制流分支路径上插入语句定义一个共享变量来实现 $\Phi$ 节点，也可以将因赋值而新定义的变量分配到同一个寄存器，从而实现在 <code>LLVM IR</code> 层次上保持 <code>SSA</code> 形式，而在寄存器层次上实质为同一变量。可以阅读<a href="https://www.zhihu.com/question/49642237/answer/117428698" target="_blank" rel="noopener">llvm的reg2mem pass做了哪些事情？ - 蓝色的回答 - 知乎</a>。</p>
+<p><img src="/2020/07/19/Clang%E6%95%99%E7%A8%8B/implement.jpg" alt="implement" style="zoom: 67%;"></p>
+<p><strong>初级 SSA</strong></p>
+<ul>
+<li><p>每个赋值都会生成一个新的变量。</p>
+</li>
+<li><p>在每个插入点为所有分支中的新变量插入 $\Phi$ 节点。</p>
+</li>
+</ul>
+<p><strong>最小化 SSA</strong></p>
+<ul>
+<li><p>每个赋值都会生成一个新的变量。</p>
+</li>
+<li><p>在每个插入点为处于活跃期的分支中的新变量插入 $\Phi$ 节点。活跃期定义是从变量第一次被定义（赋值）开始，到它下一次被赋值前的最后一次被使用为止。</p>
+</li>
+</ul>
+<h5 id="什么时候插入-Phi-函数"><a href="#什么时候插入-Phi-函数" class="headerlink" title="什么时候插入 $\Phi$ 函数"></a>什么时候插入 $\Phi$ 函数</h5><p>对于变量 <code>x</code> ，我们当且仅当以下情况时在 <code>Z</code> 中插入 $\Phi$ 函数：</p>
+<p><img src="/2020/07/19/Clang%E6%95%99%E7%A8%8B/cfg.png" alt="cfg" style="zoom: 67%;"></p>
+<ul>
+<li><p>变量 <code>x</code> 在各个分支（ <code>if.then</code>、 <code>if.else</code>）总共定义了多于一次。</p>
+</li>
+<li><p>变量 <code>x</code> 新定义所在的块都可以到达块 <code>Z</code> ，且块 <code>Z</code> 是变量 <code>x</code> 新定义所在块的最先公共后继。</p>
+</li>
+</ul>
+<p>可以应用 <a href="http://www.cs.cmu.edu/afs/cs.cmu.edu/academic/class/15745-s14/public/lectures/L13-SSA-Concepts-1up.pdf" target="_blank" rel="noopener"> <code>Lengauer-Tarjan</code> </a>算法计算支配树和支配边界判断插入 $\Phi$ 函数的块，关于支配树和支配边界还可以阅读<a href="https://blog.csdn.net/dashuniuniu/article/details/52224882" target="_blank" rel="noopener">构造Dominator Tree以及Dominator Frontier</a>。</p>
+<h3 id="SSA-在编译优化中的作用"><a href="#SSA-在编译优化中的作用" class="headerlink" title="SSA 在编译优化中的作用"></a>SSA 在编译优化中的作用</h3><ul>
+<li><p>常量传播（ <code>constant propagation</code> ）</p>
+<blockquote>
+<p>当 v $\leftarrow$ c 或 v $\leftarrow$ $\Phi$ (c, c, c) 时将  <code>v</code> 替换为 <code>c</code> ，并将 v $\leftarrow$  c 和 v $\leftarrow$ $\Phi$ (c, c, c) 语句删除。</p>
+</blockquote>
+</li>
+<li><p>复写传播（ <code>copy propagation</code> ）</p>
+<blockquote>
+<p>当 x $\leftarrow$ y 或 x $\leftarrow$ $\Phi$ (y, y, y) 时将  <code>x</code> 替换为 <code>y</code> ，并将 x $\leftarrow$ y 和 x $\leftarrow$ $\Phi$ (y, y, y) 语句删除。</p>
+</blockquote>
+</li>
+<li><p>常量折叠（ <code>constant folding</code> ）</p>
+<blockquote>
+<p>当 v $\leftarrow$ expression(c1, c2, …) 时可以将右值表达式计算出结果以替换右值表达式。</p>
+</blockquote>
+</li>
+<li><p>无用代码消除（ <code>dead code elimination</code> ）</p>
+<blockquote>
+<ul>
+<li><p>假设所有变量都是常量，直到该变量值改变。</p>
+</li>
+<li><p>假设所有基本块都无法执行，直到该块被执行。</p>
+</li>
+</ul>
+<p>通过可达性分析，将常量进行折叠，并消除无用代码。</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="SSA-参看书目"><a href="#SSA-参看书目" class="headerlink" title="SSA 参看书目"></a>SSA 参看书目</h3><ul>
+<li><a href="http://link.zhihu.com/?target=http%3A//www.cs.cmu.edu/afs/cs.cmu.edu/academic/class/15745-s16/www/">15-745 Optimizing Compilers for Modern Architectures, Spring 2016</a></li>
+<li><a href="http://ssabook.gforge.inria.fr/latest/book.pdf" target="_blank" rel="noopener">Static Single Assignment Book</a></li>
+</ul>
+<h2 id="LLVM-IR-基本语法"><a href="#LLVM-IR-基本语法" class="headerlink" title="LLVM IR 基本语法"></a>LLVM IR 基本语法</h2><p>简要介绍 <code>LLVM IR</code> 的基本语法常用的指令，详细文档请参看<a href="https://llvm.org/docs/LangRef.html" target="_blank" rel="noopener">LLVM Language Reference Manual</a>。</p>
+<h3 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h3><figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">; Function Attrs: noinline nounwind optnone uwtable</span></span><br><span class="line"><span class="comment">define dso_local i64 @_Z3fibi(i32 %n) #0 &#123;</span></span><br><span class="line"><span class="comment">entry:</span></span><br><span class="line"><span class="comment">  %retval = alloca i64, align 8</span></span><br><span class="line"><span class="comment">  %n.addr = alloca i32, align 4</span></span><br><span class="line"><span class="comment">  %result = alloca i64, align 8</span></span><br><span class="line"><span class="comment">  %f0 = alloca i64, align 8</span></span><br><span class="line"><span class="comment">  %f1 = alloca i64, align 8</span></span><br><span class="line"><span class="comment">  %i = alloca i32, align 4</span></span><br><span class="line"><span class="comment">  store i32 %n, i32* %n.addr, align 4</span></span><br><span class="line"><span class="comment">  %0 = load i32, i32* %n.addr, align 4</span></span><br><span class="line"><span class="comment">  %cmp = icmp slt i32 %0, 2</span></span><br><span class="line"><span class="comment">  br i1 %cmp, label %if.then, label %if.end</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">if.then:                                          ; preds = %entry</span></span><br><span class="line"><span class="comment">  %1 = load i32, i32* %n.addr, align 4</span></span><br><span class="line"><span class="comment">  %conv = sext i32 %1 to i64</span></span><br><span class="line"><span class="comment">  store i64 %conv, i64* %retval, align 8</span></span><br><span class="line"><span class="comment">  br label %return</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">if.end:                                           ; preds = %entry</span></span><br><span class="line"><span class="comment">  store i64 0, i64* %result, align 8</span></span><br><span class="line"><span class="comment">  store i64 0, i64* %f0, align 8</span></span><br><span class="line"><span class="comment">  store i64 1, i64* %f1, align 8</span></span><br><span class="line"><span class="comment">  store i32 1, i32* %i, align 4</span></span><br><span class="line"><span class="comment">  br label %for.cond</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">for.cond:                                         ; preds = %for.inc, %if.end</span></span><br><span class="line"><span class="comment">  %2 = load i32, i32* %i, align 4</span></span><br><span class="line"><span class="comment">  %3 = load i32, i32* %n.addr, align 4</span></span><br><span class="line"><span class="comment">  %cmp1 = icmp slt i32 %2, %3</span></span><br><span class="line"><span class="comment">  br i1 %cmp1, label %for.body, label %for.end</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">for.body:                                         ; preds = %for.cond</span></span><br><span class="line"><span class="comment">  %4 = load i64, i64* %f0, align 8</span></span><br><span class="line"><span class="comment">  %5 = load i64, i64* %f1, align 8</span></span><br><span class="line"><span class="comment">  %add = add nsw i64 %4, %5</span></span><br><span class="line"><span class="comment">  store i64 %add, i64* %result, align 8</span></span><br><span class="line"><span class="comment">  %6 = load i64, i64* %f1, align 8</span></span><br><span class="line"><span class="comment">  store i64 %6, i64* %f0, align 8</span></span><br><span class="line"><span class="comment">  %7 = load i64, i64* %result, align 8</span></span><br><span class="line"><span class="comment">  store i64 %7, i64* %f1, align 8</span></span><br><span class="line"><span class="comment">  br label %for.inc</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">for.inc:                                          ; preds = %for.body</span></span><br><span class="line"><span class="comment">  %8 = load i32, i32* %i, align 4</span></span><br><span class="line"><span class="comment">  %inc = add nsw i32 %8, 1</span></span><br><span class="line"><span class="comment">  store i32 %inc, i32* %i, align 4</span></span><br><span class="line"><span class="comment">  br label %for.cond</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">for.end:                                          ; preds = %for.cond</span></span><br><span class="line"><span class="comment">  %9 = load i64, i64* %result, align 8</span></span><br><span class="line"><span class="comment">  store i64 %9, i64* %retval, align 8</span></span><br><span class="line"><span class="comment">  br label %return</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">return:                                           ; preds = %for.end, %if.then</span></span><br><span class="line"><span class="comment">  %10 = load i64, i64* %retval, align 8</span></span><br><span class="line"><span class="comment">  ret i64 %10</span></span><br><span class="line"><span class="comment">&#125;</span></span><br></pre></td></tr></table></figure>
+<h4 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h4><p><code>;</code> 表示单行注释的开始。</p>
+<h4 id="标识符"><a href="#标识符" class="headerlink" title="标识符"></a>标识符</h4><p><code>LLVM IR</code> 中的标识符分为两种类型：全局的和局部的。全局的标识符包括函数名和全局变量，会加一个 <code>@</code> 前缀，局部的标识符会加一个 <code>%</code> 前缀。一般地，可用标识符对应的正则表达式为：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[%@][-a-zA-Z$._][-a-zA-Z$._0-9]*</span><br></pre></td></tr></table></figure>
-
-#### 函数
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">define dso_local i64 @_Z3fibi(i32 %n) #0</span><br></pre></td></tr></table></figure>
-
-定义了一个函数，其中 `i64` 代表 `64` 位整数，即 `C/C++` 中的 `int`；`@_Z3fibi` 是函数名且代表函数是全局的；括号内是参数列表。`#0` 是指向函数属性的标记符。
-
-
-
-### 数据类型
-
-#### 数组
-
-##### 语法
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[&lt;elementnumber&gt; x &lt;elementtype&gt;]</span><br></pre></td></tr></table></figure>
-
-数据元素在内存中是连续存储的。对于索引超出静态类型所指定的数组末端没有限制（尽管在某些情况下对于索引超出已分配对象的边界有限制）。这意味着一维”可变大小数组“寻址可以在零长度数组类型的 `LLVM` 中实现。例如，`LLVM` 中 `pascal` 风格数组的实现可以使用 `{i32， [0 x float]}` 类型。
-
-#### 结构体
-
-##### 语法
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">%T1 &#x3D; type &#123; &lt;type list&gt; &#125;     ; Identified normal struct type</span><br><span class="line">%T2 &#x3D; type &lt;&#123; &lt;type list&gt; &#125;&gt;   ; Identified packed struct type</span><br></pre></td></tr></table></figure>
-
-结构类型用于表示内存中的数据成员集合。结构的元素可以是任何具有大小的类型。
-
-
-通过使用 `getelementptr` 指令获得指向字段的指针，可以使用 `load` 和 `store` 访问内存中的结构。使用`extractvalue` 和 `insertvalue` 指令访问寄存器中的结构。
-
-
-结构可以选择“打包”结构，这表示结构的对齐方式是一个字节，并且元素之间没有填充。在非打包结构中，字段类型之间的填充是由模块中的 `DataLayout` 字符串定义的，这是匹配底层代码生成器所期望的内容所必需的。
-
-### 常用指令
-
-#### alloca
-
-##### 语法
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;result&gt; &#x3D; alloca [inalloca] &lt;type&gt; [, &lt;ty&gt; &lt;NumElements&gt;] [, align &lt;alignment&gt;] [, addrspace(&lt;num&gt;)]     ; yields type addrspace(num)*:result</span><br></pre></td></tr></table></figure>
-
-返回一个指针。分配的内存是未初始化的，从未初始化的内存中加载会产生一个未定义的值。如果分配的堆栈空间不足，则操作本身未定义。
-
-`alloca` 指令也可以用来分配结构体。
-
-#### load
-
-##### 语法
-
-`load` 的语法较为复杂，具有多种形式，但常用的形式一般如下：
-
+<h4 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">define dso_local i64 @_Z3fibi(i32 %n) #0</span><br></pre></td></tr></table></figure>
+<p>定义了一个函数，其中 <code>i64</code> 代表 <code>64</code> 位整数，即 <code>C/C++</code> 中的 <code>int</code>；<code>@_Z3fibi</code> 是函数名且代表函数是全局的；括号内是参数列表。<code>#0</code> 是指向函数属性的标记符。</p>
+<h3 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h3><h4 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h4><h5 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[&lt;elementnumber&gt; x &lt;elementtype&gt;]</span><br></pre></td></tr></table></figure>
+<p>数据元素在内存中是连续存储的。对于索引超出静态类型所指定的数组末端没有限制（尽管在某些情况下对于索引超出已分配对象的边界有限制）。这意味着一维”可变大小数组“寻址可以在零长度数组类型的 <code>LLVM</code> 中实现。例如，<code>LLVM</code> 中 <code>pascal</code> 风格数组的实现可以使用 <code>{i32， [0 x float]}</code> 类型。</p>
+<h4 id="结构体"><a href="#结构体" class="headerlink" title="结构体"></a>结构体</h4><h5 id="语法-1"><a href="#语法-1" class="headerlink" title="语法"></a>语法</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">%T1 &#x3D; type &#123; &lt;type list&gt; &#125;     ; Identified normal struct type</span><br><span class="line">%T2 &#x3D; type &lt;&#123; &lt;type list&gt; &#125;&gt;   ; Identified packed struct type</span><br></pre></td></tr></table></figure>
+<p>结构类型用于表示内存中的数据成员集合。结构的元素可以是任何具有大小的类型。</p>
+<p>通过使用 <code>getelementptr</code> 指令获得指向字段的指针，可以使用 <code>load</code> 和 <code>store</code> 访问内存中的结构。使用<code>extractvalue</code> 和 <code>insertvalue</code> 指令访问寄存器中的结构。</p>
+<p>结构可以选择“打包”结构，这表示结构的对齐方式是一个字节，并且元素之间没有填充。在非打包结构中，字段类型之间的填充是由模块中的 <code>DataLayout</code> 字符串定义的，这是匹配底层代码生成器所期望的内容所必需的。</p>
+<h3 id="常用指令"><a href="#常用指令" class="headerlink" title="常用指令"></a>常用指令</h3><h4 id="alloca"><a href="#alloca" class="headerlink" title="alloca"></a>alloca</h4><h5 id="语法-2"><a href="#语法-2" class="headerlink" title="语法"></a>语法</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;result&gt; &#x3D; alloca [inalloca] &lt;type&gt; [, &lt;ty&gt; &lt;NumElements&gt;] [, align &lt;alignment&gt;] [, addrspace(&lt;num&gt;)]     ; yields type addrspace(num)*:result</span><br></pre></td></tr></table></figure>
+<p>返回一个指针。分配的内存是未初始化的，从未初始化的内存中加载会产生一个未定义的值。如果分配的堆栈空间不足，则操作本身未定义。</p>
+<p><code>alloca</code> 指令也可以用来分配结构体。</p>
+<h4 id="load"><a href="#load" class="headerlink" title="load"></a>load</h4><h5 id="语法-3"><a href="#语法-3" class="headerlink" title="语法"></a>语法</h5><p><code>load</code> 的语法较为复杂，具有多种形式，但常用的形式一般如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%0 &#x3D; load i32, i32* %n.addr, align 4 &#x2F;&#x2F; 从地址%n.addr中读取i32型数据</span><br></pre></td></tr></table></figure>
-
-#### store
-
-##### 语法
-
-`store` 的语法较为复杂，具有多种形式，但常用的形式一般如下：
-
+<h4 id="store"><a href="#store" class="headerlink" title="store"></a>store</h4><h5 id="语法-4"><a href="#语法-4" class="headerlink" title="语法"></a>语法</h5><p><code>store</code> 的语法较为复杂，具有多种形式，但常用的形式一般如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">store i32 %n, i32* %n.addr, align 4 &#x2F;&#x2F; 向地址%n.addr中读取i32型数据%n</span><br></pre></td></tr></table></figure>
-
-#### call
-
-##### 语法
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;result&gt; &#x3D; [tail | musttail | notail ] call [fast-math flags] [cconv] [ret attrs] [addrspace(&lt;num&gt;)]</span><br><span class="line">           &lt;ty&gt;|&lt;fnty&gt; &lt;fnptrval&gt;(&lt;function args&gt;) [fn attrs] [ operand bundles ]</span><br></pre></td></tr></table></figure>
-
+<h4 id="call"><a href="#call" class="headerlink" title="call"></a>call</h4><h5 id="语法-5"><a href="#语法-5" class="headerlink" title="语法"></a>语法</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;result&gt; &#x3D; [tail | musttail | notail ] call [fast-math flags] [cconv] [ret attrs] [addrspace(&lt;num&gt;)]</span><br><span class="line">           &lt;ty&gt;|&lt;fnty&gt; &lt;fnptrval&gt;(&lt;function args&gt;) [fn attrs] [ operand bundles ]</span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%call2 &#x3D; call i64 @_Z3fibi(i32 %1) &#x2F;&#x2F; 调用fib函数，返回值赋给%call2</span><br></pre></td></tr></table></figure>
-
-#### ret
-
-##### 语法
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ret &lt;type&gt; &lt;value&gt;       ; Return a value from a non-void function</span><br><span class="line">ret void                 ; Return from void function</span><br></pre></td></tr></table></figure>
-
+<h4 id="ret"><a href="#ret" class="headerlink" title="ret"></a>ret</h4><h5 id="语法-6"><a href="#语法-6" class="headerlink" title="语法"></a>语法</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ret &lt;type&gt; &lt;value&gt;       ; Return a value from a non-void function</span><br><span class="line">ret void                 ; Return from void function</span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ret i64 %10 &#x2F;&#x2F; 返回%10</span><br></pre></td></tr></table></figure>
-
-#### br
-
-##### 语法
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">br i1 &lt;cond&gt;, label &lt;iftrue&gt;, label &lt;iffalse&gt;</span><br><span class="line">br label &lt;dest&gt;          ; Unconditional branch</span><br></pre></td></tr></table></figure>
-
-在执行条件 `br` 指令时，将对 `i1` 参数求值。如果该值为真，则控制流到 `iftrue` 标签参数。如果 `cond` 为假，则控制流到 `iffalse` 标签参数。`br` 指令的无条件形式以单个 `label` 值为目标。
-
-#### phi
-
-##### 语法
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;result&gt; &#x3D; phi [fast-math-flags] &lt;ty&gt; [ &lt;val0&gt;, &lt;label0&gt;], ...</span><br></pre></td></tr></table></figure>
-
-`phi` 指令在逻辑上接受在当前块之前执行的前任基本块对应所指定的值。
-
-![phi](phi.jpg)
-
-`phi` 指令主要用来解决 `SSA` （静态单赋值）带来的问题。不过 `SSA` 带来的变量不能重复赋值问题也能通过指针来解决，可以向一个不变的地址上多次执行 `store` 指令从而实现多次赋值。
-
-要想在 `LLVM IR` 中使用 `phi` 指令，可以应用 `-mem2reg` 优化：
-
+<h4 id="br"><a href="#br" class="headerlink" title="br"></a>br</h4><h5 id="语法-7"><a href="#语法-7" class="headerlink" title="语法"></a>语法</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">br i1 &lt;cond&gt;, label &lt;iftrue&gt;, label &lt;iffalse&gt;</span><br><span class="line">br label &lt;dest&gt;          ; Unconditional branch</span><br></pre></td></tr></table></figure>
+<p>在执行条件 <code>br</code> 指令时，将对 <code>i1</code> 参数求值。如果该值为真，则控制流到 <code>iftrue</code> 标签参数。如果 <code>cond</code> 为假，则控制流到 <code>iffalse</code> 标签参数。<code>br</code> 指令的无条件形式以单个 <code>label</code> 值为目标。</p>
+<h4 id="phi"><a href="#phi" class="headerlink" title="phi"></a>phi</h4><h5 id="语法-8"><a href="#语法-8" class="headerlink" title="语法"></a>语法</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;result&gt; &#x3D; phi [fast-math-flags] &lt;ty&gt; [ &lt;val0&gt;, &lt;label0&gt;], ...</span><br></pre></td></tr></table></figure>
+<p><code>phi</code> 指令在逻辑上接受在当前块之前执行的前任基本块对应所指定的值。</p>
+<p><img src="/2020/07/19/Clang%E6%95%99%E7%A8%8B/phi.jpg" alt="phi"></p>
+<p><code>phi</code> 指令主要用来解决 <code>SSA</code> （静态单赋值）带来的问题。不过 <code>SSA</code> 带来的变量不能重复赋值问题也能通过指针来解决，可以向一个不变的地址上多次执行 <code>store</code> 指令从而实现多次赋值。</p>
+<p>要想在 <code>LLVM IR</code> 中使用 <code>phi</code> 指令，可以应用 <code>-mem2reg</code> 优化：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">clang++ fib.cpp -Xclang -disable-O0-optnone -emit-llvm -S -o fib.ll </span><br><span class="line">opt -mem2reg -S fib.ll -o fib-opt.ll</span><br></pre></td></tr></table></figure>
-
-注意仍然要添加 `-Xclang -disable-O0-optnone` 编译。
-
-同理要想在 `LLVM IR` 中屏蔽 `phi` 指令，可以应用 `-reg2mem` 优化（默认情况下即使不使用 `phi` 指令）：
-
+<p>注意仍然要添加 <code>-Xclang -disable-O0-optnone</code> 编译。</p>
+<p>同理要想在 <code>LLVM IR</code> 中屏蔽 <code>phi</code> 指令，可以应用 <code>-reg2mem</code> 优化（默认情况下即使不使用 <code>phi</code> 指令）：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">clang++ fib.cpp -Xclang -disable-O0-optnone -emit-llvm -S -o fib.ll </span><br><span class="line">opt -reg2mem -S fib.ll -o fib-opt.ll</span><br></pre></td></tr></table></figure>
-
-#### getelementptr (GEP)
-
-##### 语法
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;result&gt; &#x3D; getelementptr &lt;ty&gt;, &lt;ty&gt;* &lt;ptrval&gt;&#123;, [inrange] &lt;ty&gt; &lt;idx&gt;&#125;*</span><br><span class="line">&lt;result&gt; &#x3D; getelementptr inbounds &lt;ty&gt;, &lt;ty&gt;* &lt;ptrval&gt;&#123;, [inrange] &lt;ty&gt; &lt;idx&gt;&#125;*</span><br><span class="line">&lt;result&gt; &#x3D; getelementptr &lt;ty&gt;, &lt;ptr vector&gt; &lt;ptrval&gt;, [inrange] &lt;vector index type&gt; &lt;idx&gt;</span><br></pre></td></tr></table></figure>
-
-第一个`ty`是第一个索引使用的基本类型，第二个 `ty` 表示其后的基址`ptrval`的类型。`<ty> <idx>` 是第一组索引的类型和值，`<ty> <idx>`可以出现多次，其后出现的就是第二组、第三组等等索引的类型和值。要注意索引的类型和索引使用的基本类型是不一样的，索引的类型一般为`i32`或`i64`，而索引使用的基本类型确定的是增加索引值时指针的偏移量。
-
-##### 理解第一个索引
-
-1. 第一个索引不会改变返回的指针的类型，也就是说 `ptrval` 前面的 `*` 对应什么类型，返回就是什么类型
-2. 第一个索引的偏移量的是由第一个索引的值和第一个 `ty` 指定的基本类型共同确定的。
-
-![gep1](gep1.jpg)
-
-上图中第一个索引所使用的基本类型是 `[6 x i8]`，值是1，所以返回的值相对基址 `@a_gv` 前进了 `6` 个字节。由于只有一个索引，所以返回的指针也是 `[6 x i8]*` 类型。
-
-##### 理解后面的索引
-
-1. 后面的索引是在 `Aggregate Types` 内进行索引。
-
-2. 每增加一个索引，就会使得该索引使用的基本类型和返回的指针的类型去掉一层。
-
-![gep2](gep2.jpg)
-
-我们看 `%elem_ptr = getelementptr [6 x i8], [6 x i8]* @a_gv, i32 0, i32 0` 这一句，第一个索引值是 `0`，使用的基本类型 `[6 x i8]` , 因此其使返回的指针先前进 `0 x 6` 个字节，也就是不前进，第二个索引的值是 `1`，使用的基本类型就是 `i8`（ `[6 x i8]`去掉左边的 `6` ），因此其使返回的指针前进一个字节，返回的指针类型为 `i8*`（ `[6 x i8]*`去掉左边的 `6` ）。
-
-##### GEP如何作用于结构体
-
-![gep3](gep3.jpg)
-
-只有一个索引情况下， `GEP` 作用于结构体与作用于数组的规则相同，`%new_ptr = getelementptr %MyStruct*, %MyStruct* @a_gv, i32 1 `使得 `%new_ptr` 相对 `@a_gv` 偏移一个结构体 `%MyStruct` 的大小。
-
-![gep4](gep4.jpg)
-
-在有两个索引的情况下，第二个索引对返回指针的影响跟结构体的成员类型有关。譬如说在上图中，第二个索引值是 `1`，那么返回的指针就会偏移到第二个成员，也就是偏移 `1` 个字节，由于第二个成员是 `i32` 类型，因此返回的指针是 `i32* ` 。
-
-![gep5](gep5.jpg)
-
-如果结构体的本身也有 `Aggregate Type` 的成员，就会出现超过两个索引的情况。第三个索引将会进入这个`Aggregate  Type` 成员进行索引。譬如说上图中的第二个索引是 `2` ，指针先指向第三个成员，第三个成员是个数组。再看第三个索引是 `0` ，因此指针就指向该成员的第一个元素，指针类型也变成了 `i32*` 。
-
-**注：** 本 `GEP` 小节引用了知乎用户[@ZRN-BF](https://www.zhihu.com/people/guo-ai-54)的文章[A Tour to LLVM IR（下）](https://zhuanlan.zhihu.com/p/66909226)。
-
-
-
-## Clang 介绍
-
-上文已经提到 `Clang`只是前端的一个 `Driver` ，从编译器架构上来说，`Clang ` 只是用来进行词法分析、语法分析、语义分析、中间代码生成的编译器前端。 `Clang` 需要借助其他编译器后端来实现机器代码生成。这也是`Clang` 的 `Target Information` 的作用。 `Windows` 上 `Clang` 可以与 `MSVC` 或 `MinGW` 搭配起来构成一个完整的编译器。
-
-`Clang` 生成中间代码（也就是 `LLVM ` 字节码），并在此基础上进行一系列优化操作，再进一步生成可执行文件。由于 `Clang` 需要和其他的编译器后端组合，所以在编程源码时就会出现许多由于前后端不搭配导致的问题。
-
-
-
-### Clang 交叉编译
-
-前后端的 `target` 不同，可以在编译时添加 `--target` 选项来指定后端  `target` ，具体参看[Target Information](# Target Information)。
-
-
-
-### Clang 异常处理模型
-
-首先介绍一下 `MinGW-w64` 的异常模型的异同，可以参看[GCC Wiki](https://gcc.gnu.org/wiki/WindowsGCCImprovements) 和 [Stackoverflow](https://stackoverflow.com/questions/15670169/what-is-difference-between-sjlj-vs-dwarf-vs-seh)：
-
-- `SJLJ`（`setjmp` / `longjmp` ）： 支持 `32` 位和 `64 ` 位系统。传统的异常处理模型，性能较差即使没有抛出异常，也会导致较小的性能损失（严重异常代码的性能损失约为 `15%` ），但有时这种损失可能更大。
-- `SEH` （`Structured Exception Handling` ）： 只支持  `64` 位系统。性能更加优异，当从不使用 `SEH` 的库z中抛出异常时，`SEH` 异常将导致非常糟糕的事情发生。
-- `DWARF` ：只支持  `32` 位系统。需要使用 `DWARF-2`（或 `DWARF-3` ）调试信息。`DW2 EH` 会导致可执行文件稍微膨胀，因为大型的调用堆栈展开表必须包含在可执行文件中。
-
-一般情况下，`x86_64` 可选为 `seh` 和 `sjlj`，`i686` 为`dwarf` 和 `sjlj` 。你可以通过这个[回答](https://stackoverflow.com/questions/17967597/obtaining-current-gcc-exception-model)中的方法查看 `Clang` 和 `GCC` 的当前的异常处理模型，也可以阅读 [Exceptions Handling in LLVM](http://llvm.org/docs/ExceptionHandling.html#itanium-abi-zero-cost-exception-handling)。
-
-普通 `Windows` 用户在使用 `Clang` 时可能更倾向于使用官网预编译的二进制版本直接安装，官网的编译版本通常是：
-
+<h4 id="getelementptr-GEP"><a href="#getelementptr-GEP" class="headerlink" title="getelementptr (GEP)"></a>getelementptr (GEP)</h4><h5 id="语法-9"><a href="#语法-9" class="headerlink" title="语法"></a>语法</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;result&gt; &#x3D; getelementptr &lt;ty&gt;, &lt;ty&gt;* &lt;ptrval&gt;&#123;, [inrange] &lt;ty&gt; &lt;idx&gt;&#125;*</span><br><span class="line">&lt;result&gt; &#x3D; getelementptr inbounds &lt;ty&gt;, &lt;ty&gt;* &lt;ptrval&gt;&#123;, [inrange] &lt;ty&gt; &lt;idx&gt;&#125;*</span><br><span class="line">&lt;result&gt; &#x3D; getelementptr &lt;ty&gt;, &lt;ptr vector&gt; &lt;ptrval&gt;, [inrange] &lt;vector index type&gt; &lt;idx&gt;</span><br></pre></td></tr></table></figure>
+<p>第一个<code>ty</code>是第一个索引使用的基本类型，第二个 <code>ty</code> 表示其后的基址<code>ptrval</code>的类型。<code>&lt;ty&gt; &lt;idx&gt;</code> 是第一组索引的类型和值，<code>&lt;ty&gt; &lt;idx&gt;</code>可以出现多次，其后出现的就是第二组、第三组等等索引的类型和值。要注意索引的类型和索引使用的基本类型是不一样的，索引的类型一般为<code>i32</code>或<code>i64</code>，而索引使用的基本类型确定的是增加索引值时指针的偏移量。</p>
+<h5 id="理解第一个索引"><a href="#理解第一个索引" class="headerlink" title="理解第一个索引"></a>理解第一个索引</h5><ol>
+<li>第一个索引不会改变返回的指针的类型，也就是说 <code>ptrval</code> 前面的 <code>*</code> 对应什么类型，返回就是什么类型</li>
+<li>第一个索引的偏移量的是由第一个索引的值和第一个 <code>ty</code> 指定的基本类型共同确定的。</li>
+</ol>
+<p><img src="/2020/07/19/Clang%E6%95%99%E7%A8%8B/gep1.jpg" alt="gep1"></p>
+<p>上图中第一个索引所使用的基本类型是 <code>[6 x i8]</code>，值是1，所以返回的值相对基址 <code>@a_gv</code> 前进了 <code>6</code> 个字节。由于只有一个索引，所以返回的指针也是 <code>[6 x i8]*</code> 类型。</p>
+<h5 id="理解后面的索引"><a href="#理解后面的索引" class="headerlink" title="理解后面的索引"></a>理解后面的索引</h5><ol>
+<li><p>后面的索引是在 <code>Aggregate Types</code> 内进行索引。</p>
+</li>
+<li><p>每增加一个索引，就会使得该索引使用的基本类型和返回的指针的类型去掉一层。</p>
+</li>
+</ol>
+<p><img src="/2020/07/19/Clang%E6%95%99%E7%A8%8B/gep2.jpg" alt="gep2"></p>
+<p>我们看 <code>%elem_ptr = getelementptr [6 x i8], [6 x i8]* @a_gv, i32 0, i32 0</code> 这一句，第一个索引值是 <code>0</code>，使用的基本类型 <code>[6 x i8]</code> , 因此其使返回的指针先前进 <code>0 x 6</code> 个字节，也就是不前进，第二个索引的值是 <code>1</code>，使用的基本类型就是 <code>i8</code>（ <code>[6 x i8]</code>去掉左边的 <code>6</code> ），因此其使返回的指针前进一个字节，返回的指针类型为 <code>i8*</code>（ <code>[6 x i8]*</code>去掉左边的 <code>6</code> ）。</p>
+<h5 id="GEP如何作用于结构体"><a href="#GEP如何作用于结构体" class="headerlink" title="GEP如何作用于结构体"></a>GEP如何作用于结构体</h5><p><img src="/2020/07/19/Clang%E6%95%99%E7%A8%8B/gep3.jpg" alt="gep3"></p>
+<p>只有一个索引情况下， <code>GEP</code> 作用于结构体与作用于数组的规则相同，<code>%new_ptr = getelementptr %MyStruct*, %MyStruct* @a_gv, i32 1</code>使得 <code>%new_ptr</code> 相对 <code>@a_gv</code> 偏移一个结构体 <code>%MyStruct</code> 的大小。</p>
+<p><img src="/2020/07/19/Clang%E6%95%99%E7%A8%8B/gep4.jpg" alt="gep4"></p>
+<p>在有两个索引的情况下，第二个索引对返回指针的影响跟结构体的成员类型有关。譬如说在上图中，第二个索引值是 <code>1</code>，那么返回的指针就会偏移到第二个成员，也就是偏移 <code>1</code> 个字节，由于第二个成员是 <code>i32</code> 类型，因此返回的指针是 <code>i32*</code> 。</p>
+<p><img src="/2020/07/19/Clang%E6%95%99%E7%A8%8B/gep5.jpg" alt="gep5"></p>
+<p>如果结构体的本身也有 <code>Aggregate Type</code> 的成员，就会出现超过两个索引的情况。第三个索引将会进入这个<code>Aggregate  Type</code> 成员进行索引。譬如说上图中的第二个索引是 <code>2</code> ，指针先指向第三个成员，第三个成员是个数组。再看第三个索引是 <code>0</code> ，因此指针就指向该成员的第一个元素，指针类型也变成了 <code>i32*</code> 。</p>
+<p><strong>注：</strong> 本 <code>GEP</code> 小节引用了知乎用户<a href="https://www.zhihu.com/people/guo-ai-54" target="_blank" rel="noopener">@ZRN-BF</a>的文章<a href="https://zhuanlan.zhihu.com/p/66909226" target="_blank" rel="noopener">A Tour to LLVM IR（下）</a>。</p>
+<h2 id="Clang-介绍"><a href="#Clang-介绍" class="headerlink" title="Clang 介绍"></a>Clang 介绍</h2><p>上文已经提到 <code>Clang</code>只是前端的一个 <code>Driver</code> ，从编译器架构上来说，<code>Clang</code> 只是用来进行词法分析、语法分析、语义分析、中间代码生成的编译器前端。 <code>Clang</code> 需要借助其他编译器后端来实现机器代码生成。这也是<code>Clang</code> 的 <code>Target Information</code> 的作用。 <code>Windows</code> 上 <code>Clang</code> 可以与 <code>MSVC</code> 或 <code>MinGW</code> 搭配起来构成一个完整的编译器。</p>
+<p><code>Clang</code> 生成中间代码（也就是 <code>LLVM</code> 字节码），并在此基础上进行一系列优化操作，再进一步生成可执行文件。由于 <code>Clang</code> 需要和其他的编译器后端组合，所以在编程源码时就会出现许多由于前后端不搭配导致的问题。</p>
+<h3 id="Clang-交叉编译"><a href="#Clang-交叉编译" class="headerlink" title="Clang 交叉编译"></a>Clang 交叉编译</h3><p>前后端的 <code>target</code> 不同，可以在编译时添加 <code>--target</code> 选项来指定后端  <code>target</code> ，具体参看<a href="# Target Information">Target Information</a>。</p>
+<h3 id="Clang-异常处理模型"><a href="#Clang-异常处理模型" class="headerlink" title="Clang 异常处理模型"></a>Clang 异常处理模型</h3><p>首先介绍一下 <code>MinGW-w64</code> 的异常模型的异同，可以参看<a href="https://gcc.gnu.org/wiki/WindowsGCCImprovements" target="_blank" rel="noopener">GCC Wiki</a> 和 <a href="https://stackoverflow.com/questions/15670169/what-is-difference-between-sjlj-vs-dwarf-vs-seh" target="_blank" rel="noopener">Stackoverflow</a>：</p>
+<ul>
+<li><code>SJLJ</code>（<code>setjmp</code> / <code>longjmp</code> ）： 支持 <code>32</code> 位和 <code>64</code> 位系统。传统的异常处理模型，性能较差即使没有抛出异常，也会导致较小的性能损失（严重异常代码的性能损失约为 <code>15%</code> ），但有时这种损失可能更大。</li>
+<li><code>SEH</code> （<code>Structured Exception Handling</code> ）： 只支持  <code>64</code> 位系统。性能更加优异，当从不使用 <code>SEH</code> 的库z中抛出异常时，<code>SEH</code> 异常将导致非常糟糕的事情发生。</li>
+<li><code>DWARF</code> ：只支持  <code>32</code> 位系统。需要使用 <code>DWARF-2</code>（或 <code>DWARF-3</code> ）调试信息。<code>DW2 EH</code> 会导致可执行文件稍微膨胀，因为大型的调用堆栈展开表必须包含在可执行文件中。</li>
+</ul>
+<p>一般情况下，<code>x86_64</code> 可选为 <code>seh</code> 和 <code>sjlj</code>，<code>i686</code> 为<code>dwarf</code> 和 <code>sjlj</code> 。你可以通过这个<a href="https://stackoverflow.com/questions/17967597/obtaining-current-gcc-exception-model" target="_blank" rel="noopener">回答</a>中的方法查看 <code>Clang</code> 和 <code>GCC</code> 的当前的异常处理模型，也可以阅读 <a href="http://llvm.org/docs/ExceptionHandling.html#itanium-abi-zero-cost-exception-handling" target="_blank" rel="noopener">Exceptions Handling in LLVM</a>。</p>
+<p>普通 <code>Windows</code> 用户在使用 <code>Clang</code> 时可能更倾向于使用官网预编译的二进制版本直接安装，官网的编译版本通常是：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Target: x86_64-pc-windows-msvc</span><br><span class="line">Thread model: posix</span><br></pre></td></tr></table></figure>
-
-预编译 `Clang` 默认的异常处理模型为 `seh` 。如果你使用 `MSVC` 作为后端，那么可能没有问题，因为 `MSVC` 同样使用 `seh` 。但如果你使用 `MinGW` 作为后端，就需要查看 `MinGW` 的异常处理模型是否与 `Clang` 默认的异常处理模型相同，如果不同， 可以添加 `-fdwarf-exceptions` 、 `-fsjlj-exceptions` 和 `-fseh-exceptions` 来指定异常处理模型，或者添加 `-fno-exceptions` 禁用异常机制（一般不建议）。
-
-
-
-### Clang 编译流程
-
-![process1](process1.jpg)
-![process2](process2.png)
-
-1. `Clang` 或 `Clang++` (以下以 `clang++` 为例说明，如有两者不同的特殊情况会专门指出）对待编译的源文件 `main.cpp`  进行预处理，例如将 `#include` 的文件复制到源文件中、展开宏定义、插入内联函数以及处理 `#if` 、`#endif` 、`#ifndef` 等命令。使用 `-E` 选项指定编译器只进行预处理。
-
+<p>预编译 <code>Clang</code> 默认的异常处理模型为 <code>seh</code> 。如果你使用 <code>MSVC</code> 作为后端，那么可能没有问题，因为 <code>MSVC</code> 同样使用 <code>seh</code> 。但如果你使用 <code>MinGW</code> 作为后端，就需要查看 <code>MinGW</code> 的异常处理模型是否与 <code>Clang</code> 默认的异常处理模型相同，如果不同， 可以添加 <code>-fdwarf-exceptions</code> 、 <code>-fsjlj-exceptions</code> 和 <code>-fseh-exceptions</code> 来指定异常处理模型，或者添加 <code>-fno-exceptions</code> 禁用异常机制（一般不建议）。</p>
+<h3 id="Clang-编译流程"><a href="#Clang-编译流程" class="headerlink" title="Clang 编译流程"></a>Clang 编译流程</h3><p><img src="/2020/07/19/Clang%E6%95%99%E7%A8%8B/process1.jpg" alt="process1"><br><img src="/2020/07/19/Clang%E6%95%99%E7%A8%8B/process2.png" alt="process2"></p>
+<ol>
+<li><code>Clang</code> 或 <code>Clang++</code> (以下以 <code>clang++</code> 为例说明，如有两者不同的特殊情况会专门指出）对待编译的源文件 <code>main.cpp</code>  进行预处理，例如将 <code>#include</code> 的文件复制到源文件中、展开宏定义、插入内联函数以及处理 <code>#if</code> 、<code>#endif</code> 、<code>#ifndef</code> 等命令。使用 <code>-E</code> 选项指定编译器只进行预处理。</li>
+</ol>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clang++ main.cpp -E -o main.i</span><br></pre></td></tr></table></figure>
-
-2. `Clang++` 将 `main.i` 编译为汇编代码文件。使用`-S` 选项指定编译器只进行预处理和编译。若添加上 `-emit-llvm` 选项，则会生成 `LLVM IR`（一种 `LLVM` 专用的中间表示，类似于汇编的可读的字节码）文件，否则会生成一般汇编代码文件。
-
-    **注：** `Clang` 的 `Release` 和 `Debug` 版生成的 `.ll` 文件略有不同，`Release` 版默认生成的 `.ll` 文件会丢弃变量的名字，你可以添加 `-fno-discard-value-names` 选项指定 `Clang` 保留原有的标签和标识符以增加可读性。
-
-    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">clang++ main.cpp -S -o main.s</span><br><span class="line">clang++ main.cpp -S -emit-llvm -o main.ll</span><br></pre></td></tr></table></figure>
-
-3. `Clang++` 将汇编代码文件进行汇编生成 `LLVM bitcode` （专指 `.bc` 文件）文件。使用`-c` 选项指定编译器只进行预处理、编译和汇编。若添加上 `-emit-llvm` 选项，则会生成 `LLVM bitcode` 文件，否则会生成 `.obj` 文件。
-
-    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">clang++ main.cpp -c -o main.o</span><br><span class="line">clang++ main.cpp -c -emit-llvm -o main.bc</span><br></pre></td></tr></table></figure>
-
-    ![compile](compile.JPG)
-
-4. `Clang++` 将多个 `.obj` 文件或 `LLVM bitcode` 文件链接起来，形成一个完整的文件。使用 `-r` 选项指定编译器只进行符号链接，把多个 `.obj` 文件链接为一个总的 `.obj` 文件。
-
-    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clang++ main.o factorial.o -r -o linked.o</span><br></pre></td></tr></table></figure>
-
-    ![link](link.JPG)
-
-    **注：** 
-
-    1. `libstdc++`  、`libc++`  和 `msvcrt` 都是 `C++` 标准库的一个实现。 `libstdc++` 是 `Linux` 上 `GCC` 的默认运行时库； `libc++` 是 `Mac OS` 上 `Clang` 的配套运行时库； `msvcrt` 是 `Windows` 上 `VS` 的默认运行时库。
-
-    2. `C++` 会进行 `Name Mangling` ， `Name Mangling` 是将函数名和变量名编码为惟一的名称，以便链接器能够将语言中的名称区分开，以便实现重载。 `Name Mangling` 按照一定规则根据函数名和函数参数列表生成混淆后的函数名。
-
-        使用以下命令可以得到混淆前的函数签名：
-
-        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">c++filt -n &lt;mangled-name&gt;</span><br></pre></td></tr></table></figure>
-
-        
-
-5. `Clang++` 将 `.obj` 文件编译生成可执行文件。
-
-    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clang++ linked.o -o main.exe</span><br></pre></td></tr></table></figure>
-
-**注意：**
-
-1. `clang` 和 `clang++` 只是前端的一个 `Driver` （驱动程序），`clang` 和 `clang++` 对源文件的处理本质上都是通过调用 `LLVM` 工具链实现的。`Clang` 的命令行用法参看[文档](https://clang.llvm.org/docs/CommandGuide/clang.html)。
-
-2. `clang` 和 `clang++` 在预处理、编译和汇编阶段是完全相同，`clang++` 本质上是 `clang` 的一个软连接，它通过后缀名来判断是 `C` 还是 `C++`，` -x <language>` 会指定文件语言类型 。不同的是 `clang++` 既可以链接 `C++` 标准库也可以链接 `C` 标准库，`clang` 只能链接 `C` 标准库。
-
-    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">clang++ test.c -o test.exe &#x2F;&#x2F; correct</span><br><span class="line">clang test.cpp -o test.exe &#x2F;&#x2F; error</span><br><span class="line">clang test.cpp -c -o test.o &#x2F;&#x2F; correct, because clang works same as clang++ during preprocess, compile and assemble steps</span><br><span class="line">clang test.cpp -stdc++ -o test.exe &#x2F;&#x2F; correct, clang complie successfully after specifing link library</span><br></pre></td></tr></table></figure>
-
-    
-
-#### Clang 编译选项
-
-`Clang` 兼容 `gcc` 的所有编译选项，同时`Clang` 有附带许多功能，我们可以通过添加编译选项来使用。
-
-
-
-#### `-m32` 和 `-m64` 
-
-使用 `32` 位的 `clang` 或 `gcc` 时默认生成 `32` 位的程序；使用 `64` 位的 `clang` 或 `gcc` 时默认生成 `64` 位的程序。
-
-当 `Windows` 下使用 `64` 位的 `gcc` 编译 `32` 位的程序时，必须将对应的动态链接库地址加入到 `PATH` 环境变量（ `Linux` 下可以设置 `LD_LIBRARY_PATH` ）中，或者在编译时选择静态链接。
-
-**注:**  `clang` 对 `32` 位和 `64` 位交叉编译配置较为麻烦，远不如直接使用 `MinGW-w64` 。配置交叉编译的选项最好使用专门的构建工具（如 `CMake` , `Makefile` ），直接配置环境变量不仅费时费力，而且环境变量是全局的，对编译其他程序极不友好，很容易造成冲突。
-
-
-
-
-
-#### `-ftime-trace`
-
-`Clang 9.0.0`  增加了 `-ftime-trace` ， 这能够以友好的格式生成时间跟踪分析数据，对于开发人员更好地理解编译器将大部分时间花在何处以及其他需要改进的领域非常有用。
-
+<ol>
+<li><p><code>Clang++</code> 将 <code>main.i</code> 编译为汇编代码文件。使用<code>-S</code> 选项指定编译器只进行预处理和编译。若添加上 <code>-emit-llvm</code> 选项，则会生成 <code>LLVM IR</code>（一种 <code>LLVM</code> 专用的中间表示，类似于汇编的可读的字节码）文件，否则会生成一般汇编代码文件。</p>
+<p> <strong>注：</strong> <code>Clang</code> 的 <code>Release</code> 和 <code>Debug</code> 版生成的 <code>.ll</code> 文件略有不同，<code>Release</code> 版默认生成的 <code>.ll</code> 文件会丢弃变量的名字，你可以添加 <code>-fno-discard-value-names</code> 选项指定 <code>Clang</code> 保留原有的标签和标识符以增加可读性。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">clang++ main.cpp -S -o main.s</span><br><span class="line">clang++ main.cpp -S -emit-llvm -o main.ll</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Clang++</code> 将汇编代码文件进行汇编生成 <code>LLVM bitcode</code> （专指 <code>.bc</code> 文件）文件。使用<code>-c</code> 选项指定编译器只进行预处理、编译和汇编。若添加上 <code>-emit-llvm</code> 选项，则会生成 <code>LLVM bitcode</code> 文件，否则会生成 <code>.obj</code> 文件。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">clang++ main.cpp -c -o main.o</span><br><span class="line">clang++ main.cpp -c -emit-llvm -o main.bc</span><br></pre></td></tr></table></figure>
+<p> <img src="/2020/07/19/Clang%E6%95%99%E7%A8%8B/compile.JPG" alt="compile"></p>
+</li>
+<li><p><code>Clang++</code> 将多个 <code>.obj</code> 文件或 <code>LLVM bitcode</code> 文件链接起来，形成一个完整的文件。使用 <code>-r</code> 选项指定编译器只进行符号链接，把多个 <code>.obj</code> 文件链接为一个总的 <code>.obj</code> 文件。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clang++ main.o factorial.o -r -o linked.o</span><br></pre></td></tr></table></figure>
+<p> <img src="/2020/07/19/Clang%E6%95%99%E7%A8%8B/link.JPG" alt="link"></p>
+<p> <strong>注：</strong> </p>
+<ol>
+<li><p><code>libstdc++</code>  、<code>libc++</code>  和 <code>msvcrt</code> 都是 <code>C++</code> 标准库的一个实现。 <code>libstdc++</code> 是 <code>Linux</code> 上 <code>GCC</code> 的默认运行时库； <code>libc++</code> 是 <code>Mac OS</code> 上 <code>Clang</code> 的配套运行时库； <code>msvcrt</code> 是 <code>Windows</code> 上 <code>VS</code> 的默认运行时库。</p>
+</li>
+<li><p><code>C++</code> 会进行 <code>Name Mangling</code> ， <code>Name Mangling</code> 是将函数名和变量名编码为惟一的名称，以便链接器能够将语言中的名称区分开，以便实现重载。 <code>Name Mangling</code> 按照一定规则根据函数名和函数参数列表生成混淆后的函数名。</p>
+<p> 使用以下命令可以得到混淆前的函数签名：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">c++filt -n &lt;mangled-name&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+</ol>
+<ol>
+<li><p><code>Clang++</code> 将 <code>.obj</code> 文件编译生成可执行文件。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clang++ linked.o -o main.exe</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><strong>注意：</strong></p>
+<ol>
+<li><p><code>clang</code> 和 <code>clang++</code> 只是前端的一个 <code>Driver</code> （驱动程序），<code>clang</code> 和 <code>clang++</code> 对源文件的处理本质上都是通过调用 <code>LLVM</code> 工具链实现的。<code>Clang</code> 的命令行用法参看<a href="https://clang.llvm.org/docs/CommandGuide/clang.html" target="_blank" rel="noopener">文档</a>。</p>
+</li>
+<li><p><code>clang</code> 和 <code>clang++</code> 在预处理、编译和汇编阶段是完全相同，<code>clang++</code> 本质上是 <code>clang</code> 的一个软连接，它通过后缀名来判断是 <code>C</code> 还是 <code>C++</code>，<code>-x &lt;language&gt;</code> 会指定文件语言类型 。不同的是 <code>clang++</code> 既可以链接 <code>C++</code> 标准库也可以链接 <code>C</code> 标准库，<code>clang</code> 只能链接 <code>C</code> 标准库。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">clang++ test.c -o test.exe &#x2F;&#x2F; correct</span><br><span class="line">clang test.cpp -o test.exe &#x2F;&#x2F; error</span><br><span class="line">clang test.cpp -c -o test.o &#x2F;&#x2F; correct, because clang works same as clang++ during preprocess, compile and assemble steps</span><br><span class="line">clang test.cpp -stdc++ -o test.exe &#x2F;&#x2F; correct, clang complie successfully after specifing link library</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="Clang-编译选项"><a href="#Clang-编译选项" class="headerlink" title="Clang 编译选项"></a>Clang 编译选项</h4><p><code>Clang</code> 兼容 <code>gcc</code> 的所有编译选项，同时<code>Clang</code> 有附带许多功能，我们可以通过添加编译选项来使用。</p>
+<h4 id="m32-和-m64"><a href="#m32-和-m64" class="headerlink" title="-m32 和 -m64"></a><code>-m32</code> 和 <code>-m64</code></h4><p>使用 <code>32</code> 位的 <code>clang</code> 或 <code>gcc</code> 时默认生成 <code>32</code> 位的程序；使用 <code>64</code> 位的 <code>clang</code> 或 <code>gcc</code> 时默认生成 <code>64</code> 位的程序。</p>
+<p>当 <code>Windows</code> 下使用 <code>64</code> 位的 <code>gcc</code> 编译 <code>32</code> 位的程序时，必须将对应的动态链接库地址加入到 <code>PATH</code> 环境变量（ <code>Linux</code> 下可以设置 <code>LD_LIBRARY_PATH</code> ）中，或者在编译时选择静态链接。</p>
+<p><strong>注:</strong>  <code>clang</code> 对 <code>32</code> 位和 <code>64</code> 位交叉编译配置较为麻烦，远不如直接使用 <code>MinGW-w64</code> 。配置交叉编译的选项最好使用专门的构建工具（如 <code>CMake</code> , <code>Makefile</code> ），直接配置环境变量不仅费时费力，而且环境变量是全局的，对编译其他程序极不友好，很容易造成冲突。</p>
+<h4 id="ftime-trace"><a href="#ftime-trace" class="headerlink" title="-ftime-trace"></a><code>-ftime-trace</code></h4><p><code>Clang 9.0.0</code>  增加了 <code>-ftime-trace</code> ， 这能够以友好的格式生成时间跟踪分析数据，对于开发人员更好地理解编译器将大部分时间花在何处以及其他需要改进的领域非常有用。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt; clang++ test.cpp -ftime-trace -c -o test.o</span><br><span class="line">Time trace json-file dumped to test.json</span><br><span class="line">Use chrome:&#x2F;&#x2F;tracing or Speedscope App (https:&#x2F;&#x2F;www.speedscope.app) for flamegraph visualization</span><br></pre></td></tr></table></figure>
-
-在[speedscope](https://www.speedscope.app)中你可以看到以下的交互可视化图形：
-
-![visualize1](visualize1.png)
-
-![visualize2](visualize2.png)
-
-[`Clang Build Analyzer`](https://github.com/aras-p/ClangBuildAnalyzer)工具有助于聚合来自多个编译的时间跟踪报告，并输出关于“什么花了最多的时间”的信息摘要。
-
-
-
-#### `--analyze`
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">clang --analyze -Xclang -analyzer-checker&#x3D;&quot;cplusplus&quot; test.cpp</span><br><span class="line">clang --analyze -Xanalyzer -analyzer-checker&#x3D;&quot;cplusplus&quot; test.cpp</span><br></pre></td></tr></table></figure>
-
-`--analyze` 选项启动 `Clang` 的静态代码分析，能够检查代码中存在的错误与缺陷。 `Clang` 可以检查进行特定的检查（ `checker` ），`Clang` 内置的 `checker` 查看[available_checks](http://clang-analyzer.llvm.org/available_checks.html)。
-
-
-
-
-
-### Clang 拓展
-
-#### clang-format
-
-`clang-format` 是一个代码格式化工具，`clang-format` 内建了 `LLVM`，`Google`，`Chromium`， `Mozilla`， `WebKit` 五种格式，可以通过 `--style=` 指定，也可以使用 `--style=file` 从 `.clang-format` 文件中加载自定义代码格式配置（ **`clang-format` 的配置文件名必须是 `.clang-format`** ）。
-
+<p>在<a href="https://www.speedscope.app" target="_blank" rel="noopener">speedscope</a>中你可以看到以下的交互可视化图形：</p>
+<p><img src="/2020/07/19/Clang%E6%95%99%E7%A8%8B/visualize1.png" alt="visualize1"></p>
+<p><img src="/2020/07/19/Clang%E6%95%99%E7%A8%8B/visualize2.png" alt="visualize2"></p>
+<p><a href="https://github.com/aras-p/ClangBuildAnalyzer" target="_blank" rel="noopener"><code>Clang Build Analyzer</code></a>工具有助于聚合来自多个编译的时间跟踪报告，并输出关于“什么花了最多的时间”的信息摘要。</p>
+<h4 id="analyze"><a href="#analyze" class="headerlink" title="--analyze"></a><code>--analyze</code></h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">clang --analyze -Xclang -analyzer-checker&#x3D;&quot;cplusplus&quot; test.cpp</span><br><span class="line">clang --analyze -Xanalyzer -analyzer-checker&#x3D;&quot;cplusplus&quot; test.cpp</span><br></pre></td></tr></table></figure>
+<p><code>--analyze</code> 选项启动 <code>Clang</code> 的静态代码分析，能够检查代码中存在的错误与缺陷。 <code>Clang</code> 可以检查进行特定的检查（ <code>checker</code> ），<code>Clang</code> 内置的 <code>checker</code> 查看<a href="http://clang-analyzer.llvm.org/available_checks.html" target="_blank" rel="noopener">available_checks</a>。</p>
+<h3 id="Clang-拓展"><a href="#Clang-拓展" class="headerlink" title="Clang 拓展"></a>Clang 拓展</h3><h4 id="clang-format"><a href="#clang-format" class="headerlink" title="clang-format"></a>clang-format</h4><p><code>clang-format</code> 是一个代码格式化工具，<code>clang-format</code> 内建了 <code>LLVM</code>，<code>Google</code>，<code>Chromium</code>， <code>Mozilla</code>， <code>WebKit</code> 五种格式，可以通过 <code>--style=</code> 指定，也可以使用 <code>--style=file</code> 从 <code>.clang-format</code> 文件中加载自定义代码格式配置（ <strong><code>clang-format</code> 的配置文件名必须是 <code>.clang-format</code></strong> ）。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clang-format --style&#x3D;LLVM -i main.cpp</span><br></pre></td></tr></table></figure>
-
-`-i` 选项指定就地更改 `main.cpp `。
-
-#### clang-tidy
-
-`clang-tidy` 是一个基于 `clang` 的 `C++` `linter`工具。它的目的是提供一个可扩展的框架，用于诊断和修复典型的编程错误，如样式违规、接口误用或可以通过静态分析推断出的 `bug` 。`clang-tidy` 是模块化的，提供了一个方便的接口来编写新的插件。`clang-tidy` 提供了许多 `check `，可以在 `-check=` 中指定一个或多个 `check`  （用 `,` 隔开）其他详细用法查看[官网](http://clang-analyzer.llvm.org)。
-
+<p><code>-i</code> 选项指定就地更改 <code>main.cpp</code>。</p>
+<h4 id="clang-tidy"><a href="#clang-tidy" class="headerlink" title="clang-tidy"></a>clang-tidy</h4><p><code>clang-tidy</code> 是一个基于 <code>clang</code> 的 <code>C++</code> <code>linter</code>工具。它的目的是提供一个可扩展的框架，用于诊断和修复典型的编程错误，如样式违规、接口误用或可以通过静态分析推断出的 <code>bug</code> 。<code>clang-tidy</code> 是模块化的，提供了一个方便的接口来编写新的插件。<code>clang-tidy</code> 提供了许多 <code>check</code>，可以在 <code>-check=</code> 中指定一个或多个 <code>check</code>  （用 <code>,</code> 隔开）其他详细用法查看<a href="http://clang-analyzer.llvm.org" target="_blank" rel="noopener">官网</a>。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clang-tidy -checks&#x3D;-*,clang-analyzer-*,-clang-analyzer-cplusplus* test.cpp --</span><br></pre></td></tr></table></figure>
+<p><strong>注：</strong></p>
+<ol>
+<li><code>Windows</code> 下使用要在命令行最后添加 <code>--</code> 。</li>
+<li><code>Windows</code> 下 <code>clang-tidy</code> 的 <code>-check</code> 和 <code>-config</code> 选项组合在一起可能会出现问题，可以把所有选项都放在 <code>-config</code> 中。</li>
+</ol>
+<h4 id="clang-check"><a href="#clang-check" class="headerlink" title="clang-check"></a>clang-check</h4><p><code>clang-check</code> 与 <code>clang-tidy</code> 功能类似，在没有显示指定任何选项的情况下运行 <code>clang-check</code> 将运行 <code>-fsyntax-only</code> 模式（检查语法是否正确）。只有在指定 <code>-analyze</code> 时，才会执行静态分析工具，<strong>但不能同时指定 <code>-fsyntax-only</code> 和 <code>-analyze</code></strong>，<code>-check</code> 选项可以参考<a href="http://clang-analyzer.llvm.org/" target="_blank" rel="noopener">官网</a>。</p>
+<p><code>clang-check</code> 还可以输出代码的 <code>AST</code> ，具体用法执行 <code>clang-check -help</code> 。</p>
+<h3 id="LLVM-优化"><a href="#LLVM-优化" class="headerlink" title="LLVM 优化"></a>LLVM 优化</h3><p><code>clang</code> 一般只有在开启优化时才会内联函数，如果使用 <code>-fno-inline</code> 选项或 <code>-O0</code> 优化级别（默认优化级别），<code>GCC</code> 将不内联任何函数，可以使用 <code>-Winline</code> 选项来确定函数是否没有内联以及为什么没有内联。此时可以使用 <code>__attribute__</code> 机制。</p>
+<p>在函数声明末尾 <code>;</code> 之前添加 <code>__attribute__((always_inline))</code> ，可以强制编译器内联函数（尽可能内联，必须满足内联函数要求）。</p>
+<p><strong><code>C++</code> 中内联编译限制：</strong></p>
+<ol>
+<li>不能存在任何形式的循环语句。</li>
+<li>不能存在过多的条件判断语句。</li>
+<li>函数体不能过于庞大。</li>
+<li>不能对函数进行取址操作。</li>
+<li>内联函数声明必须在调用语句之前。</li>
+</ol>
+<h3 id="Clang-使用中遇到的问题"><a href="#Clang-使用中遇到的问题" class="headerlink" title="Clang 使用中遇到的问题"></a>Clang 使用中遇到的问题</h3><ol>
+<li><p><code>MinGW-w64</code> 与 <code>float.h</code>  不兼容：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">G:\mingw64\x86_64-w64-mingw32\include\float.h:28:15: fatal error: &#39;float.h&#39; file not found</span><br><span class="line">#include_next &lt;float.h&gt;</span><br></pre></td></tr></table></figure>
+<p> 查看 <a href="https://stackoverflow.com/questions/57166340/how-do-i-compile-code-using-clang-with-the-mingw-c-c-library-particular-issu" target="_blank" rel="noopener">‘float.h’ file not found-StackOverflow</a>。</p>
+</li>
+<li><p><code>member [...] in archive is not an object</code>  一般有2个原因：</p>
+<ol>
+<li>链接的对象或库文件位数不一致，例如 <code>x64</code> 和 <code>x86</code> 混合。</li>
+<li>使用 <code>LTO</code> 时没有在编译和链接时都添加上 <code>flto</code> 。</li>
+</ol>
+</li>
+<li><p>链接静态库时出现 <code>error: undefined reference to &#39;xxx&#39;</code> ，一般是由于缺少库文件或者链接顺序错误。被链接的库应该放在最后面。</p>
+</li>
+</ol>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="_参考资料_"></a>_参考资料_</h2><p>[1] <a href="https://www.iteye.com/blog/user/rednaxelafx" target="_blank" rel="noopener">RednaxelaFX Blog</a></p>
 
-**注：**
-
-1.  `Windows` 下使用要在命令行最后添加 `--` 。
-2. `Windows` 下 `clang-tidy` 的 `-check` 和 `-config` 选项组合在一起可能会出现问题，可以把所有选项都放在 `-config` 中。
-
-#### clang-check
-
-`clang-check` 与 `clang-tidy` 功能类似，在没有显示指定任何选项的情况下运行 `clang-check` 将运行 `-fsyntax-only` 模式（检查语法是否正确）。只有在指定 `-analyze` 时，才会执行静态分析工具，**但不能同时指定 `-fsyntax-only` 和 `-analyze`**，`-check` 选项可以参考[官网](http://clang-analyzer.llvm.org/)。
-
-`clang-check` 还可以输出代码的 `AST` ，具体用法执行 `clang-check -help` 。
-
-### LLVM 优化
-
-`clang` 一般只有在开启优化时才会内联函数，如果使用 `-fno-inline` 选项或 `-O0` 优化级别（默认优化级别），`GCC` 将不内联任何函数，可以使用 `-Winline` 选项来确定函数是否没有内联以及为什么没有内联。此时可以使用 `__attribute__` 机制。
-
-在函数声明末尾 `;` 之前添加 `__attribute__((always_inline))` ，可以强制编译器内联函数（尽可能内联，必须满足内联函数要求）。
-
-**`C++` 中内联编译限制：**
-
-1. 不能存在任何形式的循环语句。
-2. 不能存在过多的条件判断语句。
-3. 函数体不能过于庞大。
-4. 不能对函数进行取址操作。
-5. 内联函数声明必须在调用语句之前。
-
-### Clang 使用中遇到的问题
-
-1. `MinGW-w64` 与 `float.h`  不兼容：
-
-    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">G:\mingw64\x86_64-w64-mingw32\include\float.h:28:15: fatal error: &#39;float.h&#39; file not found</span><br><span class="line">#include_next &lt;float.h&gt;</span><br></pre></td></tr></table></figure>
-
-    查看 ['float.h' file not found-StackOverflow](https://stackoverflow.com/questions/57166340/how-do-i-compile-code-using-clang-with-the-mingw-c-c-library-particular-issu)。
-
-2. `member [...] in archive is not an object`  一般有2个原因：
-
-    1. 链接的对象或库文件位数不一致，例如 `x64` 和 `x86` 混合。
-    2. 使用 `LTO` 时没有在编译和链接时都添加上 `flto` 。
-
-3. 链接静态库时出现 `error: undefined reference to 'xxx'` ，一般是由于缺少库文件或者链接顺序错误。被链接的库应该放在最后面。
-
-## _参考资料_
-
-[1] [RednaxelaFX Blog](https://www.iteye.com/blog/user/rednaxelafx)</language></idx></ty></idx></ty>
     </div>
 
     
@@ -831,6 +537,9 @@
     
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Clang-%E7%BC%96%E8%AF%91%E5%99%A8/" rel="tag"># Clang 编译器</a>
+          </div>
 
         
 
@@ -838,10 +547,13 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/07/19/Test/" rel="prev" title="Test">
-      <i class="fa fa-chevron-left"></i> Test
+    <a href="/2020/07/19/hello-world/" rel="prev" title="Hello World">
+      <i class="fa fa-chevron-left"></i> Hello World
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2020/07/19/Windows-bat%E8%AF%AD%E6%B3%95/" rel="next" title="Windows bat语法">
+      Windows bat语法 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -900,6 +612,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LLVM"><span class="nav-number">1.</span> <span class="nav-text">LLVM</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#LLVM-工具链"><span class="nav-number">1.1.</span> <span class="nav-text">LLVM 工具链</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#llvm-as"><span class="nav-number">1.1.1.</span> <span class="nav-text">llvm-as</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#llvm-dis"><span class="nav-number">1.1.2.</span> <span class="nav-text">llvm-dis</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#llvm-link"><span class="nav-number">1.1.3.</span> <span class="nav-text">llvm-link</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lli"><span class="nav-number">1.1.4.</span> <span class="nav-text">lli</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#llc"><span class="nav-number">1.1.5.</span> <span class="nav-text">llc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#opt"><span class="nav-number">1.1.6.</span> <span class="nav-text">opt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lld"><span class="nav-number">1.1.7.</span> <span class="nav-text">lld</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lldb"><span class="nav-number">1.1.8.</span> <span class="nav-text">lldb</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LLVM-IR-文件的布局"><span class="nav-number">1.2.</span> <span class="nav-text">LLVM IR 文件的布局</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Target-Information"><span class="nav-number">1.2.1.</span> <span class="nav-text">Target Information</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LLVM-IR-文件的架构"><span class="nav-number">1.2.2.</span> <span class="nav-text">LLVM IR 文件的架构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSA-（静态单分配）"><span class="nav-number">1.3.</span> <span class="nav-text">SSA （静态单分配）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#定义"><span class="nav-number">1.3.1.</span> <span class="nav-text">定义</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Phi-函数"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">$\Phi$ 函数</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#什么时候插入-Phi-函数"><span class="nav-number">1.3.1.1.1.</span> <span class="nav-text">什么时候插入 $\Phi$ 函数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSA-在编译优化中的作用"><span class="nav-number">1.3.2.</span> <span class="nav-text">SSA 在编译优化中的作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSA-参看书目"><span class="nav-number">1.3.3.</span> <span class="nav-text">SSA 参看书目</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LLVM-IR-基本语法"><span class="nav-number">1.4.</span> <span class="nav-text">LLVM IR 基本语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本语法"><span class="nav-number">1.4.1.</span> <span class="nav-text">基本语法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#注释"><span class="nav-number">1.4.1.1.</span> <span class="nav-text">注释</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#标识符"><span class="nav-number">1.4.1.2.</span> <span class="nav-text">标识符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#函数"><span class="nav-number">1.4.1.3.</span> <span class="nav-text">函数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据类型"><span class="nav-number">1.4.2.</span> <span class="nav-text">数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数组"><span class="nav-number">1.4.2.1.</span> <span class="nav-text">数组</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#语法"><span class="nav-number">1.4.2.1.1.</span> <span class="nav-text">语法</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#结构体"><span class="nav-number">1.4.2.2.</span> <span class="nav-text">结构体</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#语法-1"><span class="nav-number">1.4.2.2.1.</span> <span class="nav-text">语法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用指令"><span class="nav-number">1.4.3.</span> <span class="nav-text">常用指令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#alloca"><span class="nav-number">1.4.3.1.</span> <span class="nav-text">alloca</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#语法-2"><span class="nav-number">1.4.3.1.1.</span> <span class="nav-text">语法</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#load"><span class="nav-number">1.4.3.2.</span> <span class="nav-text">load</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#语法-3"><span class="nav-number">1.4.3.2.1.</span> <span class="nav-text">语法</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#store"><span class="nav-number">1.4.3.3.</span> <span class="nav-text">store</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#语法-4"><span class="nav-number">1.4.3.3.1.</span> <span class="nav-text">语法</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#call"><span class="nav-number">1.4.3.4.</span> <span class="nav-text">call</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#语法-5"><span class="nav-number">1.4.3.4.1.</span> <span class="nav-text">语法</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ret"><span class="nav-number">1.4.3.5.</span> <span class="nav-text">ret</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#语法-6"><span class="nav-number">1.4.3.5.1.</span> <span class="nav-text">语法</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#br"><span class="nav-number">1.4.3.6.</span> <span class="nav-text">br</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#语法-7"><span class="nav-number">1.4.3.6.1.</span> <span class="nav-text">语法</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#phi"><span class="nav-number">1.4.3.7.</span> <span class="nav-text">phi</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#语法-8"><span class="nav-number">1.4.3.7.1.</span> <span class="nav-text">语法</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#getelementptr-GEP"><span class="nav-number">1.4.3.8.</span> <span class="nav-text">getelementptr (GEP)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#语法-9"><span class="nav-number">1.4.3.8.1.</span> <span class="nav-text">语法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#理解第一个索引"><span class="nav-number">1.4.3.8.2.</span> <span class="nav-text">理解第一个索引</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#理解后面的索引"><span class="nav-number">1.4.3.8.3.</span> <span class="nav-text">理解后面的索引</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#GEP如何作用于结构体"><span class="nav-number">1.4.3.8.4.</span> <span class="nav-text">GEP如何作用于结构体</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Clang-介绍"><span class="nav-number">1.5.</span> <span class="nav-text">Clang 介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Clang-交叉编译"><span class="nav-number">1.5.1.</span> <span class="nav-text">Clang 交叉编译</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Clang-异常处理模型"><span class="nav-number">1.5.2.</span> <span class="nav-text">Clang 异常处理模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Clang-编译流程"><span class="nav-number">1.5.3.</span> <span class="nav-text">Clang 编译流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Clang-编译选项"><span class="nav-number">1.5.3.1.</span> <span class="nav-text">Clang 编译选项</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#m32-和-m64"><span class="nav-number">1.5.3.2.</span> <span class="nav-text">-m32 和 -m64</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ftime-trace"><span class="nav-number">1.5.3.3.</span> <span class="nav-text">-ftime-trace</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#analyze"><span class="nav-number">1.5.3.4.</span> <span class="nav-text">--analyze</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Clang-拓展"><span class="nav-number">1.5.4.</span> <span class="nav-text">Clang 拓展</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#clang-format"><span class="nav-number">1.5.4.1.</span> <span class="nav-text">clang-format</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#clang-tidy"><span class="nav-number">1.5.4.2.</span> <span class="nav-text">clang-tidy</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#clang-check"><span class="nav-number">1.5.4.3.</span> <span class="nav-text">clang-check</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LLVM-优化"><span class="nav-number">1.5.5.</span> <span class="nav-text">LLVM 优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Clang-使用中遇到的问题"><span class="nav-number">1.5.6.</span> <span class="nav-text">Clang 使用中遇到的问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">1.6.</span> <span class="nav-text">_参考资料_</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -913,9 +626,13 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">4</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span>
       </div>
   </nav>
 </div>
@@ -998,6 +715,61 @@
 
 
   
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 
